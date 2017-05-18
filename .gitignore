@@ -1,3 +1,11 @@
+# IDE
+*.kdev4
+.kdev4/
+
+# Build and install
+build/*
+install/*
+
 # Prerequisites
 *.d
 
