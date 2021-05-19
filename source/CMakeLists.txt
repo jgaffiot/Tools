@@ -1,20 +1,20 @@
-# ######################################################################################
+# ------------------------------------------------------------------------------------ #
 # Check if cmake has the required version
 cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 set_property(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
 
-# ######################################################################################
+# ------------------------------------------------------------------------------------ #
 # Declaring the project
 project(tools)
 
-# ######################################################################################
+# ------------------------------------------------------------------------------------ #
 # Set version
 set(TOOLS_MAJOR_VERSION 1)
 set(TOOLS_MINOR_VERSION 0)
 set(TOOLS_PATCH_VERSION 0)
 set(TOOLS_VERSION ${TOOLS_MAJOR_VERSION}.${TOOLS_MINOR_VERSION}.${TOOLS_PATCH_VERSION})
 
-# ######################################################################################
+# ------------------------------------------------------------------------------------ #
 # Set compilation version
 if((CMAKE_BUILD_TYPE MATCHES "Debug") OR (DEFINED DEBUG))
     set(CMAKE_BUILD_TYPE "DEBUG")
@@ -30,7 +30,7 @@ if(NOT CMAKE_BUILD_TYPE)
     message(STATUS "No build type selected, default to Release")
 endif()
 
-# ######################################################################################
+# ------------------------------------------------------------------------------------ #
 # Offer the user the choice of overriding the installation directories
 set(CMAKE_INSTALL_PREFIX
     ${CMAKE_BINARY_DIR}/../../install/
@@ -49,18 +49,18 @@ set(INSTALL_CMAKE_DIR
     CACHE PATH "Installation directory for CMake files" FORCE
 )
 
-# ######################################################################################
+# ------------------------------------------------------------------------------------ #
 # Defining default install dir
 set(CMAKE_INSTALL_LIBDIR lib/) # Search for GNUInstallDirs in CMake documentation
 set(CMAKE_INSTALL_BINDIR bin/) # Search for GNUInstallDirs in CMake documentation
 
-# ######################################################################################
+# ------------------------------------------------------------------------------------ #
 # Defining global default install dirs
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_INSTALL_PREFIX}/arch)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_INSTALL_PREFIX}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_INSTALL_PREFIX}/bin)
 
-# ######################################################################################
+# ------------------------------------------------------------------------------------ #
 # Make relative paths absolute(needed later on)
 foreach(p LIB BIN CMAKE INCLUDE CMAKE)
     set(var INSTALL_${p}_DIR)
@@ -69,7 +69,7 @@ foreach(p LIB BIN CMAKE INCLUDE CMAKE)
     endif()
 endforeach()
 
-# ######################################################################################
+# ------------------------------------------------------------------------------------ #
 # Do we have ROOT(to link the data base with ROOT) ?
 option(USE_ROOT "Use ROOT to build the data base" OFF)
 
@@ -97,7 +97,7 @@ if(USE_ROOT)
     include_directories(SYSTEM ${ROOT_INCLUDE_DIRS})
 endif(USE_ROOT)
 
-# ######################################################################################
+# ------------------------------------------------------------------------------------ #
 # Set compiler option Set C++ 17 if not already set
 if(NOT CMAKE_CXX_FLAGS MATCHES "-std=c\\+\\+")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
@@ -107,17 +107,17 @@ set(CMAKE_CXX_FLAGS
     "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wno-long-long -Wno-vla"
 )
 
-# ######################################################################################
+# ------------------------------------------------------------------------------------ #
 # Set the headers directory
 include_directories(${PROJECT_SOURCE_DIR}/inc ${PROJECT_BINARY_DIR})
 
-# ######################################################################################
+# ------------------------------------------------------------------------------------ #
 # Configure a header file to pass version to the source code
 configure_file(
     "${PROJECT_SOURCE_DIR}/ToolsConfig.hh.in" "${PROJECT_BINARY_DIR}/ToolsConfig.hh"
 )
 
-# ######################################################################################
+# ------------------------------------------------------------------------------------ #
 # Target library Tools Generating file lists
 file(GLOB TOOLS_SRC ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB TOOLS_INC ${PROJECT_SOURCE_DIR}/inc/*.hh)
@@ -138,7 +138,7 @@ install(
     PUBLIC_HEADER DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev
 )
 
-# ######################################################################################
+# ------------------------------------------------------------------------------------ #
 # Create the package Add all targets to the build-tree export set
 export(TARGETS Tools FILE "${PROJECT_BINARY_DIR}/ToolsTargets.cmake")
 

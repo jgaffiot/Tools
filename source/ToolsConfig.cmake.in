@@ -1,36 +1,36 @@
-#Tools CMake Configuration File for External Projects
+# Tools CMake Configuration File for External Projects
 
-#It defines the following variables
-#TOOLS_CXX_FLAGS - c++ flags for Tools
-#TOOLS_INCLUDE_DIR - include directory for Tools
-#TOOLS_LIBRARY_DIR - include library for Tools
-#TOOLS_LIBRARIES - libraries to link against
+# It defines the following variables
+#
+# * TOOLS_CXX_FLAGS   - c++ flags for Tools
+# * TOOLS_INCLUDE_DIR - include directory for Tools
+# * TOOLS_LIBRARY_DIR - include library for Tools
+# * TOOLS_LIBRARIES   - libraries to link against
 
-#-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- #
-#Locate ourselves, since all other config files should have been
-#installed alongside us...
+# ------------------------------------------------------------------------------------ #
+# Locate ourselves, since all other config files should have been installed alongside
+# us...
 get_filename_component(TOOLS_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
-#-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- #
-#Provide* recommended* compiler flags used by this build of Tools
-#Don't mess with the actual CMAKE_CXX_FLAGS!!!
-#It's up to the user what to do with these
-    set(TOOLS_CXX_FLAGS " -std=c++11")
+# ------------------------------------------------------------------------------------ #
+# Provide *recommended* compiler flags used by this build of Tools. Don't mess with the
+# actual CMAKE_CXX_FLAGS!!! It's up to the user what to do with these.
+set(TOOLS_CXX_FLAGS " -std=c++17")
 
-#-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- #
-#Configure the path to the headers
-        set(TOOLS_INCLUDE_DIR "@CONF_INCLUDE_DIR@")
-#set(TOOLS_INCLUDE_DIR ${TOOLS_CMAKE_DIR} /../ inc /)
+# ------------------------------------------------------------------------------------ #
+# Configure the path to the headers
+set(TOOLS_INCLUDE_DIR "@CONF_INCLUDE_DIR@")
+# set(TOOLS_INCLUDE_DIR ${TOOLS_CMAKE_DIR}/../inc/)
 
-#-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- #
-#Configure the path to the library
-            set(TOOLS_LIBRARY_DIR "@CONF_LIBRARY_DIR@")
-#set(TOOLS_LIBRARY_DIR ${TOOLS_CMAKE_DIR} /../../ install / lib /)
+# ------------------------------------------------------------------------------------ #
+# Configure the path to the library
+set(TOOLS_LIBRARY_DIR "@CONF_LIBRARY_DIR@")
+# set(TOOLS_LIBRARY_DIR ${TOOLS_CMAKE_DIR}/../../install/lib/)
 
-#-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- #
-#Our library dependencies(contains definitions for IMPORTED targets)
-                include("${TOOLS_CMAKE_DIR}/ToolsTargets.cmake")
+# ------------------------------------------------------------------------------------ #
+# Our library dependencies (contains definitions for IMPORTED targets)
+include("${TOOLS_CMAKE_DIR}/ToolsTargets.cmake")
 
-#-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- #
-#These are IMPORTED targets created by ToolsTargets.cmake
-                    set(TOOLS_LIBRARIES Tools)
+# ------------------------------------------------------------------------------------ #
+# These are IMPORTED targets created by ToolsTargets.cmake
+set(TOOLS_LIBRARIES Tools)
