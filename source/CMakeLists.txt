@@ -69,8 +69,10 @@ if (USE_ROOT)
   include(${ROOT_USE_FILE})
 
   # Now check for C++11
-  if (NOT ROOT_CXX_FLAGS MATCHES "-std=c\\+\\+11")
-    message(FATAL_ERROR "Your ROOT version is good, but was not compiled with C++11")
+  if (NOT ROOT_CXX_FLAGS MATCHES "-std=c\\+\\+17")
+    message(
+    FATAL_ERROR
+    "Your ROOT version is good, but was not compiled with C++17")
   endif()
 
   # Setting the compiler flags for Root
@@ -85,9 +87,9 @@ endif(USE_ROOT)
 
 #----------------------------------------------#
 ## Set compiler option
-# Set C++11 if not already set
-if (NOT CMAKE_CXX_FLAGS MATCHES "-std=c\\+\\+11")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+# Set C++17 if not already set
+if (NOT CMAKE_CXX_FLAGS MATCHES "-std=c\\+\\+")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 endif()
 # Set warnings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wno-long-long -Wno-vla")

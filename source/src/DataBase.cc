@@ -287,7 +287,7 @@ vector< double > DataTable::GetColumnAsNum(const string& colname) const
 
   vector<double> v;
   for (auto &el: ColMap.at(colname)) { v.push_back(stod(el)); }
-  return std::move(v);
+  return v;
 }
 
 ////////////////////////////////////////////////////////////////
