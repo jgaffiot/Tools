@@ -2,8 +2,9 @@
 #define TOOLSCONFIG_HH 1
 
 // The version from the CMakeLists
-#define Tools_VERSION_MAJOR @Tools_VERSION_MAJOR@
-#define Tools_VERSION_MINOR @Tools_VERSION_MINOR@
+#define Tools_VERSION_MAJOR @TOOLS_MAJOR_VERSION@
+#define Tools_VERSION_MINOR @TOOLS_MINOR_VERSION@
+#define Tools_VERSION_PATCH @TOOLS_PATCH_VERSION@
 
 // The flag to use ROOT or not
 #cmakedefine USE_ROOT

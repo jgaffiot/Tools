@@ -1,0 +1,23 @@
+[flake8]
+max-line-length = 88
+
+exclude =
+    .git,
+    __pycache__,
+    .kdev4,
+    build,
+    install,
+    .pytest_cache,
+
+# it's not a bug that we aren't using all of hacking
+ignore =
+    # H104: file contains nothing but comments
+    H104
+    # H301: one import per line
+    H301,
+    # H306: imports not in alphabetical order (time, os)
+    H306,
+    # W503: line break before binary operator
+    W503
+    # E203: whitespace before ':', because of slicing (such as list[2 : 3])
+    E203
