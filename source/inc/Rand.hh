@@ -96,7 +96,8 @@ private:
   Random() = delete;
   Random(Random&) = delete;
 
-  static decltype(std::chrono::high_resolution_clock::now().time_since_epoch().count()) theSeed;
+  using clock_count_ts = decltype(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+  static clock_count_ts theSeed;
   static std::default_random_engine theGenerator;
 
   static std::uniform_real_distribution<double> uniform_real_distro;
@@ -122,8 +123,8 @@ private:
 public:
   enum Axis { X=0, Y=1, Z=2};
 
-  inline static auto GetSeed() -> decltype(theSeed) const { return theSeed; }
-  inline static auto GetGenerator() -> decltype(theGenerator) const { return theGenerator; }
+  inline static auto GetSeed() { return theSeed; }
+  inline static auto GetGenerator() { return theGenerator; }
 
   inline static double Uniform() { return uniform_real_distro(theGenerator); }
   inline static double Uniform(double max) { return max * uniform_real_distro(theGenerator); }
@@ -294,9 +295,9 @@ private: // the different implementations wrapping the different methods to set 
 };
 
 /// initialisation of members (static but template so in header)
-template<class vector> decltype(std::chrono::high_resolution_clock::now().time_since_epoch().count())
+template<class vector> typename Random<vector>::clock_count_ts
 Random<vector>::theSeed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-template<class vector>
+template<class vector> 
 std::default_random_engine Random<vector>::theGenerator(theSeed);
 
 template<class vector>
