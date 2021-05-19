@@ -53,16 +53,17 @@ public:
 ////////////////////////////////////////////////////////////////
 
 /** DataBase provides a simple "database" of numeric and string values:
-   a string/value hashtable that is initialized from a simple text file.
-   The file can also contain any number of table as defined as below (see DataTable).
+  a string/value hashtable that is initialized from a simple text file.
+  The file can also contain any number of table as defined as below (see DataTable).
 
   The text file looks something like this:
-   @code
-   # blank lines and lines beginning with '#' are ignored
+  @code
+  # blank lines and lines beginning with '#' are ignored
 
-   pi  3.14159265358979312  # any space before and any character after the '#' are
-  ignored model  glisur e  2.71828182845904509e+00  This is 'e' as in exp(1), not the e+
-  charge. q_e 1.60217646200000007e-19 coulomb  # Charge of the positron in coulombs
+    pi  3.14159265358979312  # any character after the '#' are ignored
+    model  INCL++            # any space before the '#' are ignored
+    e  2.71828182845904509e+00  This is 'e' as in exp(1), not the e+ charge.
+    q_e 1.60217646200000007e-19 coulomb  # Charge of the positron in coulombs
    @endcode
 
    The above input would define four parameters: a numeric parameter
