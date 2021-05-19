@@ -15,6 +15,7 @@ pyupgrade = "^2.17.0"
 black = "^21.5b1"
 flake8 = "^3.9.2"
 pytest = "^6.2.4"
+cpplint = "^1.5.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -33,20 +34,22 @@ exclude = '''
 '''
 
 [tool.pytest.ini_options]
-addopts =
+addopts = '''
+    -vv
 #      -s
-     -vv
     --exitfirst
     --capture=no
     --showlocals
     --black
     --flake8
     --forked
-python_files = *.py
-testpaths = test
-norecursedirs =
+'''
+python_files = "*.py"
+testpaths = "test"
+norecursedirs = '''
     build
     install
+'''
 # python_classes = TestOf  # to avoid collecting TestMode
 # Daily options
 #  --failed-first: relaunch all tests but failed tests first

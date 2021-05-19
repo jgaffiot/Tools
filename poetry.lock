@@ -98,6 +98,18 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
+name = "cpplint"
+version = "1.5.4"
+description = "Automated checker to ensure C++ files follow Google's style guide"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.extras]
+dev = ["flake8 (>=3.7.8)", "pylint (>=1.8.4)", "tox (>=3.0.0)", "tox-pyenv", "pytest (>=4.6,<5.0)", "pytest-cov", "pyparsing (<3)", "zipp (<=0.5.1)", "configparser (<=3.7.4)", "testfixtures"]
+test = ["pytest (>=4.6,<5.0)", "pytest-cov", "pyparsing (<3)", "zipp (<=0.5.1)", "configparser (<=3.7.4)", "testfixtures"]
+
+[[package]]
 name = "cppyy"
 version = "2.0.0"
 description = "Cling-based Python-C++ bindings"
@@ -315,7 +327,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "e54edeffcdd951c7bcb18bcee43580cf8f20354454b8f96f565deb35ce07b436"
+content-hash = "99729f82d24b25d461ab8f6f289f343d344b925d7cfbb3df168cae38bcb4e0ab"
 
 [metadata.files]
 appdirs = [
@@ -349,6 +361,10 @@ cmakelang = [
 colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},
     {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
+]
+cpplint = [
+    {file = "cpplint-1.5.4-py3-none-any.whl", hash = "sha256:a4fb2df986485fbe82603ab9a2832f8668b7253956eac2bfafb1374950eed01f"},
+    {file = "cpplint-1.5.4.tar.gz", hash = "sha256:c5d70711f06a7a8bfdc09bd7a19c13e114e009a70c8dc16caad1e5f0d2f3cc71"},
 ]
 cppyy = [
     {file = "cppyy-2.0.0.tar.gz", hash = "sha256:e528c955895710e733de9cfcc91b462ad66f594ff84ecc7ed3af09f239711e0e"},
