@@ -1,83 +1,72 @@
-# To automate pre-commit hooks:
-# install pre-commit (typically with pip)
-# run:
-#    pre-commit install
-# That's it!
-# See https://pre-commit.com for more information
-
-# See https://pre-commit.com/hooks.html for more hooks
-
 ---
 exclude: ^(build/|install/)
 fail_fast: true
 minimum_pre_commit_version: 1.15.0
 
 repos:
-- repo: local
-  hooks:
-  # Python
-  - id: pyupgrade
-    name: PyUpgrade
-    entry: pyupgrade
-    language: system
-    types: [python]
-    args: ['--py38-plus']
-    
-  - id: black
-    name: Black
-    entry: black
-    language: system
-    types: [python]
-    
-  - id: flake8
-    name: Flake8
-    entry: flake8
-    language: system
-    types: [python]
+  - repo: local
+    hooks:
+# Python
+      - id: pyupgrade
+        name: PyUpgrade
+        entry: pyupgrade
+        language: system
+        types: [python]
+        args: [--py38-plus]
+      - id: black
+        name: Black
+        entry: black
+        language: system
+        types: [python]
+      - id: flake8
+        name: Flake8
+        entry: flake8
+        language: system
+        types: [python]
 
-  # C++
-  - id: compilation
-    name: Compilation
-    description: Compile the project
-    language: system
-    always_run: true
-    entry: make
-  
-  - id: clang-format
-    name: Clang-format
-    description: Run `clang-format` against C/C++ header and source files
-    language: system
-    files: \.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
-    entry: clang-format -i
+# C++
+      - id: compilation
+        name: Compilation
+        description: Compile the project
+        language: system
+        always_run: true
+        entry: make
 
-  - id: cpplint
-    name: CPPlint
-    description: Run `cpplint` against C/C++ header and source files
-    language: python
-    files: \.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
-    entry: cpplint
+      - id: clang-format
+        name: Clang-format
+        description: Run `clang-format` against C/C++ header and source files
+        language: system
+        files: \.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
+        entry: clang-format -i
 
-  - id: cppcheck
-    name: CPPcheck
-    description: Run `cppcheck` against C/C++ source files
-    language: system
-    files: \.(c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
-    entry: cppcheck --error-exitcode=1
-    args: ["--enable=warning"]
+      - id: cpplint
+        name: CPPlint
+        description: Run `cpplint` against C/C++ header and source files
+        language: python
+        files: \.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
+        entry: cpplint
 
-- repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
-  rev: 0.1.0
-  hooks:
+      - id: cppcheck
+        name: CPPcheck
+        description: Run `cppcheck` against C/C++ source files
+        language: system
+        files: \.(c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
+        entry: cppcheck --error-exitcode=1
+        args: [--enable=warning]
+
+  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+    rev: 0.1.0
+    hooks:
       - id: yamlfmt
-        args: [--mapping, '4', --sequence, '4', --offset, '0', --colons, --width, '150']
+        args: [--mapping, '2', --sequence, '4', --offset, '2', --width, '150']
 
--   repo: git://github.com/doublify/pre-commit-clang-format
+  - repo: git://github.com/doublify/pre-commit-clang-format
     rev: master
     hooks:
-    -   id: clang-format
+      - id: clang-format
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: v4.0.1
     hooks:
       - id: check-added-large-files
       - id: forbid-new-submodules
@@ -89,7 +78,7 @@ repos:
       - id: fix-byte-order-marker
         types: [text]
       - id: mixed-line-ending
-        args: ['--fix=lf']
+        args: [--fix=lf]
         types: [text]
       - id: check-merge-conflict
         types: [text]
@@ -111,7 +100,7 @@ repos:
       - id: check-yaml
         types: [yaml]
       - id: name-tests-test
-        args: ['--django']
+        args: [--django]
         files: (^|/)tests/.+\.py$
       - id: check-ast
         types: [python]
@@ -144,4 +133,3 @@ repos:
       #- id: pyupgrade
         #types: [python]
         #args: ['--py38-plus']
-...
