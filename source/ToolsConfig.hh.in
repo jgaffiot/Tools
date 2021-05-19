@@ -8,4 +8,4 @@
 // The flag to use ROOT or not
 #cmakedefine USE_ROOT
 
-#endif // TOOLSCONFIG_HH
+#endif  // TOOLSCONFIG_HH
