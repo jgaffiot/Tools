@@ -6,16 +6,16 @@
  */
 // --------------------------------------------------------------------------//
 
-#include <String.hh>
+#include "String.hh"
+
 using namespace tools;
 
-hash_t HashRunTime(const char* str)
-{
-  hash_t ret{detail_string::basis};
-  while(*str){
-    ret ^= *str;
-    ret *= detail_string::prime;
-    ++str;
-  }
-  return ret;
+hash_t HashRunTime(const char* str) {
+    hash_t ret{detail_string::basis};
+    while (*str) {
+        ret ^= *str;
+        ret *= detail_string::prime;
+        ++str;
+    }
+    return ret;
 }

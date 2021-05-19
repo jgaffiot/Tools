@@ -15,22 +15,20 @@
 
 // Define make_unique only for C++11
 #if __cplusplus < 201103L
-#  error C++11 or higher is required
+#    error C++11 or higher is required
 #elif __cplusplus == 201103L
 
-template<typename T, typename ...Args>
-std::unique_ptr<T> make_unique( Args&& ...args )
-{
-  return std::unique_ptr<T>( new T( std::forward<Args>(args)... ) );
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args) {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
 // with deleter
-template<typename T, typename D, typename ...Args>
-std::unique_ptr<T,D> make_unique( Args&& ...args )
-{
-  return std::unique_ptr<T,D>( new T( std::forward<Args>(args)... ) );
+template<typename T, typename D, typename... Args>
+std::unique_ptr<T, D> make_unique(Args&&... args) {
+    return std::unique_ptr<T, D>(new T(std::forward<Args>(args)...));
 }
 
-#endif // __cplusplus == 201103L
+#endif  // __cplusplus == 201103L
 
-#endif // MAKE_UNIQUE_HH
+#endif  // MAKE_UNIQUE_HH

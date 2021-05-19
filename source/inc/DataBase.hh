@@ -11,39 +11,41 @@
 #ifndef DATABASE_HH
 #define DATABASE_HH 1
 
-#include <ToolsConfig.hh>
-
 #ifdef USE_ROOT
-# define DATABASE__USE_ROOT 1
+#    define DATABASE__USE_ROOT 1
 #endif
 
-#include <Exception.hh>
-
 #include <iostream>
-#include <memory>
 #include <map>
-#include <vector>
+#include <memory>
 #include <string>
+#include <vector>
+
+#include "Exception.hh"
+#include "ToolsConfig.hh"
 
 #ifdef DATABASE__USE_ROOT
 class TFile;
 #endif
 
-namespace tools {
-
+namespace tools
+{
 class DataTable;
 
 ////////////////////////////////////////////////////////////////
 ////////////////////////// exception ///////////////////////////
 ////////////////////////////////////////////////////////////////
 
-class database_except : public except {
+class database_except: public except {
 public:
-  explicit database_except(const std::string& arg): except(arg) {}
-  explicit database_except(const std::string& arg, std::ofstream& write): except(arg,write) {}
+    explicit database_except(const std::string& arg): except(arg) {}
+    explicit database_except(const std::string& arg, std::ofstream& write):
+        except(arg, write) {}
 
-  template <typename T> database_except(const T& val): except(val) {}
-  template <typename T, typename ... Args> database_except(const T& val, Args ... args): except(val, args ...) {}
+    template<typename T>
+    database_except(const T& val): except(val) {}
+    template<typename T, typename... Args>
+    database_except(const T& val, Args... args): except(val, args...) {}
 };
 
 ////////////////////////////////////////////////////////////////
@@ -58,10 +60,9 @@ public:
    @code
    # blank lines and lines beginning with '#' are ignored
 
-   pi  3.14159265358979312  # any space before and any character after the '#' are ignored
-   model  glisur
-   e  2.71828182845904509e+00  This is 'e' as in exp(1), not the e+ charge.
-   q_e 1.60217646200000007e-19 coulomb  # Charge of the positron in coulombs
+   pi  3.14159265358979312  # any space before and any character after the '#' are
+  ignored model  glisur e  2.71828182845904509e+00  This is 'e' as in exp(1), not the e+
+  charge. q_e 1.60217646200000007e-19 coulomb  # Charge of the positron in coulombs
    @endcode
 
    The above input would define four parameters: a numeric parameter
@@ -98,101 +99,142 @@ public:
     Use the GetDataBase members to get the unique instance of the class per program.
     Creator and destructor are then private.
 
-   Based on DCparam from DoubleChooz software, based on GLG4 package from Glenn Horton-Smith.
-   Rewritten with std::string and regex by Jonathan Gaffiot.
+   Based on DCparam from DoubleChooz software, based on GLG4 package from Glenn
+  Horton-Smith. Rewritten with std::string and regex by Jonathan Gaffiot.
 */
 
 class DataBase {
 public:
-  /// Singleton management
-  // Get reference to the read/write database, constructing as necessary. Use this only to fill the database.
-  static DataBase& GetInputDataBase() {
-    if (theDataBase == nullptr) { theDataBase = new DataBase(false); }
-    else { theDataBase->IsReadOnly = false; }
-    return *theDataBase;
-  }
-  // Get the pointer to the read/write database, constructing as necessary. Use this only to fill the database.
-  static DataBase* GetInputDataBasePtr() {
-    if (theDataBase == nullptr) { theDataBase = new DataBase(false); }
-    else { theDataBase->IsReadOnly = false; }
-    return theDataBase;
-  }
+    /// Singleton management
+    // Get reference to the read/write database, constructing as necessary. Use this
+    // only to fill the database.
+    static DataBase& GetInputDataBase() {
+        if (theDataBase == nullptr) {
+            theDataBase = new DataBase(false);
+        } else {
+            theDataBase->IsReadOnly = false;
+        }
+        return *theDataBase;
+    }
+    // Get the pointer to the read/write database, constructing as necessary. Use this
+    // only to fill the database.
+    static DataBase* GetInputDataBasePtr() {
+        if (theDataBase == nullptr) {
+            theDataBase = new DataBase(false);
+        } else {
+            theDataBase->IsReadOnly = false;
+        }
+        return theDataBase;
+    }
 
-  // Get reference to the read-only database, constructing as necessary
-  static const DataBase& GetDataBase() {
-    if (theDataBase == nullptr) { theDataBase = new DataBase(true); }
-    else { theDataBase->IsReadOnly = true; }
-    return *theDataBase;
-  }
-  // Get the pointer to the read-only database, constructing as necessary
-  static DataBase const * GetDataBasePtr() {
-    if (theDataBase == nullptr) { theDataBase = new DataBase(true); }
-    else { theDataBase->IsReadOnly = true; }
-    return theDataBase;
-  }
+    // Get reference to the read-only database, constructing as necessary
+    static const DataBase& GetDataBase() {
+        if (theDataBase == nullptr) {
+            theDataBase = new DataBase(true);
+        } else {
+            theDataBase->IsReadOnly = true;
+        }
+        return *theDataBase;
+    }
+    // Get the pointer to the read-only database, constructing as necessary
+    static DataBase const* GetDataBasePtr() {
+        if (theDataBase == nullptr) {
+            theDataBase = new DataBase(true);
+        } else {
+            theDataBase->IsReadOnly = true;
+        }
+        return theDataBase;
+    }
 
+    /// Getters, constant methods -> no need to check for IsReadOnly
+    std::string GetPath(const char* env_path) const;
+    inline std::string GetPath(const std::string& env_path) const {
+        return GetPath(env_path.c_str());
+    }
 
-  /// Getters, constant methods -> no need to check for IsReadOnly
-  std::string GetPath(const char* env_path) const;
-  inline std::string GetPath(const std::string& env_path) const { return GetPath(env_path.c_str()); }
-
-  void WriteText(const char *filename, const char* env_path=nullptr) const;
-  void WriteText(std::ostream &os) const;
-  inline void Print() const { WriteText(std::cout); }
+    void WriteText(const char* filename, const char* env_path = nullptr) const;
+    void WriteText(std::ostream& os) const;
+    inline void Print() const { WriteText(std::cout); }
 
 #ifdef DATABASE__USE_ROOT
-  void WriteRoot(const char *filename) const;
-  void WriteRoot(TFile* file) const;
+    void WriteRoot(const char* filename) const;
+    void WriteRoot(TFile* file) const;
 #endif
 
-  double             GetNumValue(const std::string& key) const;
-  const std::string& GetStrValue(const std::string& key) const;
+    double GetNumValue(const std::string& key) const;
+    const std::string& GetStrValue(const std::string& key) const;
 
-  // bunch of classic accessors
-  inline double             operator[](const std::string& key) const { return GetNumValue(key); }
-  inline const std::string& operator()(const std::string& key) const { return GetStrValue(key); }
+    // bunch of classic accessors
+    inline double operator[](const std::string& key) const { return GetNumValue(key); }
+    inline const std::string& operator()(const std::string& key) const {
+        return GetStrValue(key);
+    }
 
-         const std::shared_ptr<DataTable> GetTablePtr(const char* name)        const;
-  inline const std::shared_ptr<DataTable> GetTablePtr(const std::string& name) const { return GetTablePtr(name.c_str()); }
-  inline const DataTable& GetTable(const char* name)        const { return *GetTablePtr(name); }
-  inline const DataTable& GetTable(const std::string& name) const { return *GetTablePtr(name.c_str()); }
+    const std::shared_ptr<DataTable> GetTablePtr(const char* name) const;
+    inline const std::shared_ptr<DataTable> GetTablePtr(const std::string& name) const {
+        return GetTablePtr(name.c_str());
+    }
+    inline const DataTable& GetTable(const char* name) const {
+        return *GetTablePtr(name);
+    }
+    inline const DataTable& GetTable(const std::string& name) const {
+        return *GetTablePtr(name.c_str());
+    }
 
-  /** Test if key is in the numeric parameter table */
-  inline bool HasNumValue(const std::string& key)    const { return (NumMap.count(key)>0); }
-  /** Test if key is in the string parameter table */
-  inline bool HasStrValue(const std::string& key) const { return (StringMap.count(key)>0 && StringMap.at(key).size()>0); }
-  /** Test if key is in the table table */
-  inline bool HasTable(const std::string& tablename) const { return (TableMap.count(tablename)>0); }
+    /** Test if key is in the numeric parameter table */
+    inline bool HasNumValue(const std::string& key) const {
+        return (NumMap.count(key) > 0);
+    }
+    /** Test if key is in the string parameter table */
+    inline bool HasStrValue(const std::string& key) const {
+        return (StringMap.count(key) > 0 && StringMap.at(key).size() > 0);
+    }
+    /** Test if key is in the table table */
+    inline bool HasTable(const std::string& tablename) const {
+        return (TableMap.count(tablename) > 0);
+    }
 
-  /** Get list of keys, in the order in which they were read in. */
-  inline const std::vector<std::string>& GetListOfKeys() const { return KeyList; }
+    /** Get list of keys, in the order in which they were read in. */
+    inline const std::vector<std::string>& GetListOfKeys() const { return KeyList; }
 
+    /// Setters, NON constant methods -> DO need to check for IsReadOnly
+    enum EOverwrite
+    {
+        kKeep,
+        kOverride
+    };
+    void ReadFile(
+        const char* filename,
+        const char* env_path = nullptr,
+        const char* prefix = nullptr,
+        EOverwrite overwrite = kKeep);
+    void ReadFile(
+        std::istream& is, std::string prefix = "", EOverwrite overwrite = kKeep);
 
-  /// Setters, NON constant methods -> DO need to check for IsReadOnly
-  enum EOverwrite { kKeep, kOverride };
-  void ReadFile(const char *filename, const char* env_path=nullptr, const char* prefix=nullptr, EOverwrite overwrite= kKeep);
-  void ReadFile(std::istream& is, std::string prefix="", EOverwrite overwrite= kKeep);
+    double& operator[](const std::string& key);
+    std::string& operator()(const std::string& key);
 
-       double& operator[](const std::string& key);
-  std::string& operator()(const std::string& key);
-
-  inline void SetNumValue(const std::string& key, double value) { this->operator[](key) = value; }
-  inline void SetStrValue(const std::string& key, const std::string& value) { this->operator()(key) = value; }
+    inline void SetNumValue(const std::string& key, double value) {
+        this->operator[](key) = value;
+    }
+    inline void SetStrValue(const std::string& key, const std::string& value) {
+        this->operator()(key) = value;
+    }
 
 private:
-  /// Constructors
-  DataBase(bool isreadonly) { IsReadOnly = isreadonly; }
-  DataBase(const DataBase &) = delete;
-  DataBase() = delete;
+    /// Constructors
+    DataBase(bool isreadonly) { IsReadOnly = isreadonly; }
+    DataBase(const DataBase&) = delete;
+    DataBase() = delete;
 
-  /// Members
-  bool IsReadOnly; // read-only most of time, when reading values from map
-  static DataBase *theDataBase;  // common instance for database
+    /// Members
+    bool IsReadOnly;  // read-only most of time, when reading values from map
+    static DataBase* theDataBase;  // common instance for database
 
-  std::vector<std::string> KeyList;            // to preserve order
-  std::map<std::string, double> NumMap;         // numeric values
-  std::map<std::string, std::string> StringMap; // string values
-  std::map<std::string, std::shared_ptr<DataTable> > TableMap;  // tables
+    std::vector<std::string> KeyList;  // to preserve order
+    std::map<std::string, double> NumMap;  // numeric values
+    std::map<std::string, std::string> StringMap;  // string values
+    std::map<std::string, std::shared_ptr<DataTable>> TableMap;  // tables
 };
 
 ////////////////////////////////////////////////////////////////
@@ -223,7 +265,8 @@ private:
    Column names are separated by whitespace; column names cannot contain white space.
    The table continues until the first blank line.
 
-   Used in conjuction with DataBase, which save each table under its name in a table base.
+   Used in conjuction with DataBase, which save each table under its name in a table
+   base.
 
    Example code fragments:
     Accessing a table:
@@ -243,44 +286,49 @@ private:
        make_PMT( id[ipmt].Atoi(), shape[ipmt] );
     @endcode
 */
-class DataTable
-{
+class DataTable {
 public:
-  typedef std::vector<std::string> Col_t;
-  inline int GetNbRows()    const { return NbRow; }
-  inline int GetNbColumns() const { return ColNames.size(); }
-  inline const std::vector<std::string>& GetColumnNames() const { return ColNames; }
+    typedef std::vector<std::string> Col_t;
+    inline int GetNbRows() const { return NbRow; }
+    inline int GetNbColumns() const { return ColNames.size(); }
+    inline const std::vector<std::string>& GetColumnNames() const { return ColNames; }
 
-  std::vector<double> GetColumnAsNum(const std::string &colname) const;
-  inline const Col_t& GetColumn(const std::string &colname) const {
-    if ( ColMap.count(colname)==0 ) {
-      throw database_except(" ***Error DataTable::operator[]: Unknown column ",colname);
+    std::vector<double> GetColumnAsNum(const std::string& colname) const;
+    inline const Col_t& GetColumn(const std::string& colname) const {
+        if (ColMap.count(colname) == 0) {
+            throw database_except(
+                " ***Error DataTable::operator[]: Unknown column ", colname);
+        }
+        return ColMap.at(colname);
     }
-    return ColMap.at(colname);
-  }
 
-  inline const Col_t& operator[](const std::string &colname) const { return GetColumn(colname); }
-  inline double operator()(const std::string &colname, int iRow) const {
-    if (iRow<0 or iRow>=NbRow) { throw database_except(" ***Error DataTable::operator(): No line number: ",iRow); }
-    return std::stod(GetColumn(colname).at(iRow));
-  }
+    inline const Col_t& operator[](const std::string& colname) const {
+        return GetColumn(colname);
+    }
+    inline double operator()(const std::string& colname, int iRow) const {
+        if (iRow < 0 or iRow >= NbRow) {
+            throw database_except(
+                " ***Error DataTable::operator(): No line number: ", iRow);
+        }
+        return std::stod(GetColumn(colname).at(iRow));
+    }
 
-  void Print(std::ostream &os) const;
-  inline void Print() const { Print(std::cout); }
+    void Print(std::ostream& os) const;
+    inline void Print() const { Print(std::cout); }
 
 private:
-  // Constructor is private, so that only DataBase creates DataTable, thanks to the friend declaration below
-  DataTable(std::istream& is, std::string& line);
-  DataTable(const DataTable&) = delete;
-  DataTable() = delete;
-  friend void DataBase::ReadFile(std::istream&, std::string, EOverwrite);
+    // Constructor is private, so that only DataBase creates DataTable, thanks to the
+    // friend declaration below
+    DataTable(std::istream& is, std::string& line);
+    DataTable(const DataTable&) = delete;
+    DataTable() = delete;
+    friend void DataBase::ReadFile(std::istream&, std::string, EOverwrite);
 
-  std::map< std::string, Col_t > ColMap; // map of column vectors
-  std::vector<std::string> ColNames;     // column names, in order
-  int NbRow=0;
+    std::map<std::string, Col_t> ColMap;  // map of column vectors
+    std::vector<std::string> ColNames;  // column names, in order
+    int NbRow = 0;
 };
 
-} // namespace tools
+}  // namespace tools
 
 #endif /* DATABASE_HH */
-

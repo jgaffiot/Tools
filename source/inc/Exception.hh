@@ -9,34 +9,37 @@
 #ifndef EXCEPTION_HH
 #define EXCEPTION_HH 1
 
-#include <String.hh>
-
 #include <exception>
-#include <string>
 #include <fstream>
 #include <sstream>
+#include <string>
 
-namespace tools {
+#include "String.hh"
 
-class except : public std::exception {
+namespace tools
+{
+class except: public std::exception {
 public:
-  virtual ~except() noexcept {}
+    virtual ~except() noexcept {}
 
-  explicit except(const std::string& arg): std::exception(), message(arg) {}
-  explicit except(const std::string& arg, std::ofstream& write): std::exception(), message(arg) {
-    write << message << std::endl;
-  }
+    explicit except(const std::string& arg): std::exception(), message(arg) {}
+    explicit except(const std::string& arg, std::ofstream& write):
+        std::exception(), message(arg) {
+        write << message << std::endl;
+    }
 
-  template <typename ... Args>
-  except(Args ... args): std::exception() { message = scat(args...); }
+    template<typename... Args>
+    except(Args... args): std::exception() {
+        message = scat(args...);
+    }
 
-  inline virtual const std::string& swhat() const noexcept { return message; }
-  inline virtual const char* what() const noexcept { return message.c_str(); }
+    inline virtual const std::string& swhat() const noexcept { return message; }
+    inline virtual const char* what() const noexcept { return message.c_str(); }
 
 private:
-  std::string message;
+    std::string message;
 };
 
-} // namespace tools
+}  // namespace tools
 
-#endif // EXCEPTION_HH
+#endif  // EXCEPTION_HH
