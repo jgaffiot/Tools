@@ -1,21 +1,21 @@
 # ######################################################################################
-#Check if cmake has the required version
+# Check if cmake has the required version
 cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 set_property(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
 
 # ######################################################################################
-#Declaring the project
+# Declaring the project
 project(tools)
 
 # ######################################################################################
-#Set version
+# Set version
 set(TOOLS_MAJOR_VERSION 1)
 set(TOOLS_MINOR_VERSION 0)
 set(TOOLS_PATCH_VERSION 0)
 set(TOOLS_VERSION ${TOOLS_MAJOR_VERSION}.${TOOLS_MINOR_VERSION}.${TOOLS_PATCH_VERSION})
 
 # ######################################################################################
-#Set compilation version
+# Set compilation version
 if((CMAKE_BUILD_TYPE MATCHES "Debug") OR (DEFINED DEBUG))
     set(CMAKE_BUILD_TYPE "DEBUG")
     if(NOT DEFINED DEBUG)
@@ -31,7 +31,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # ######################################################################################
-#Offer the user the choice of overriding the installation directories
+# Offer the user the choice of overriding the installation directories
 set(CMAKE_INSTALL_PREFIX
     ${CMAKE_BINARY_DIR}/../../install/
     CACHE PATH "Prefix for installation" FORCE
@@ -50,76 +50,75 @@ set(INSTALL_CMAKE_DIR
 )
 
 # ######################################################################################
-#Defining default install dir
+# Defining default install dir
 set(CMAKE_INSTALL_LIBDIR lib/) # Search for GNUInstallDirs in CMake documentation
 set(CMAKE_INSTALL_BINDIR bin/) # Search for GNUInstallDirs in CMake documentation
 
 # ######################################################################################
-#Defining global default install dirs
+# Defining global default install dirs
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_INSTALL_PREFIX}/arch)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_INSTALL_PREFIX}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_INSTALL_PREFIX}/bin)
 
 # ######################################################################################
-#Make relative paths absolute(needed later on)
+# Make relative paths absolute(needed later on)
 foreach(p LIB BIN CMAKE INCLUDE CMAKE)
     set(var INSTALL_${p}_DIR)
     if(NOT IS_ABSOLUTE "${${var}}")
-        set(${
-    var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
+        set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
     endif()
 endforeach()
 
 # ######################################################################################
-#Do we have ROOT(to link the data base with ROOT) ?
+# Do we have ROOT(to link the data base with ROOT) ?
 option(USE_ROOT "Use ROOT to build the data base" OFF)
 
-#Add the ROOT libraries ?
+# Add the ROOT libraries ?
 if(USE_ROOT)
-#Look for ROOT, at least 6.00, and compiled with C++ 11
+    # Look for ROOT, at least 6.00, and compiled with C++ 11
     list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
     find_package(ROOT 6.00 REQUIRED)
     include(${ROOT_USE_FILE})
 
-#Now check for C++ 11
+    # Now check for C++ 11
     if(NOT ROOT_CXX_FLAGS MATCHES "-std=c\\+\\+17")
         message(
             FATAL_ERROR "Your ROOT version is good, but was not compiled with C++17"
         )
     endif()
 
-#Setting the compiler flags for Root
+    # Setting the compiler flags for Root
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
 
-#Add the ROOT libraries to the potential EXTRA libraries
+    # Add the ROOT libraries to the potential EXTRA libraries
     set(EXTRA_LIBS ${EXTRA_LIBS} ${ROOT_LIBRARIES})
 
-#Add the path to the ROOT headers
+    # Add the path to the ROOT headers
     include_directories(SYSTEM ${ROOT_INCLUDE_DIRS})
 endif(USE_ROOT)
 
 # ######################################################################################
-#Set compiler option Set C++ 17 if not already set
+# Set compiler option Set C++ 17 if not already set
 if(NOT CMAKE_CXX_FLAGS MATCHES "-std=c\\+\\+")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 endif()
-#Set warnings
+# Set warnings
 set(CMAKE_CXX_FLAGS
     "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wno-long-long -Wno-vla"
 )
 
 # ######################################################################################
-#Set the headers directory
+# Set the headers directory
 include_directories(${PROJECT_SOURCE_DIR}/inc ${PROJECT_BINARY_DIR})
 
 # ######################################################################################
-#Configure a header file to pass version to the source code
+# Configure a header file to pass version to the source code
 configure_file(
     "${PROJECT_SOURCE_DIR}/ToolsConfig.hh.in" "${PROJECT_BINARY_DIR}/ToolsConfig.hh"
 )
 
 # ######################################################################################
-#Target library Tools Generating file lists
+# Target library Tools Generating file lists
 file(GLOB TOOLS_SRC ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB TOOLS_INC ${PROJECT_SOURCE_DIR}/inc/*.hh)
 
