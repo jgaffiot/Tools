@@ -16,13 +16,10 @@ set(TOOLS_VERSION ${TOOLS_MAJOR_VERSION}.${TOOLS_MINOR_VERSION}.${TOOLS_PATCH_VE
 
 # ------------------------------------------------------------------------------------ #
 # Set compilation version
-if((CMAKE_BUILD_TYPE MATCHES "Debug") OR (DEFINED DEBUG))
-    set(CMAKE_BUILD_TYPE "DEBUG")
-    if(NOT DEFINED DEBUG)
-        set(DEBUG 1)
-    endif()
-    message(STATUS "Debug build type selected, level ${DEBUG}")
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+    set(DEBUG 1)
     add_definitions(-DDEBUG=${DEBUG})
+    message(STATUS "Debug build type selected, level ${DEBUG}")
 endif()
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -80,7 +77,7 @@ if(USE_ROOT)
     find_package(ROOT 6.00 REQUIRED)
     include(${ROOT_USE_FILE})
 
-    # Now check for C++ 11
+    # Now check for C++ 17
     if(NOT ROOT_CXX_FLAGS MATCHES "-std=c\\+\\+17")
         message(
             FATAL_ERROR "Your ROOT version is good, but was not compiled with C++17"
@@ -108,6 +105,16 @@ set(CMAKE_CXX_FLAGS
 )
 
 # ------------------------------------------------------------------------------------ #
+# Get the Cppyy and clang package
+execute_process(
+  COMMAND cling-config --cmake
+  OUTPUT_VARIABLE CPPYY_MODULE_PATH
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+list(APPEND CMAKE_MODULE_PATH ${CPPYY_MODULE_PATH})
+find_package(Cppyy REQUIRED)
+# find_package(Clang 11 REQUIRED)
+
+# ------------------------------------------------------------------------------------ #
 # Set the headers directory
 include_directories(${PROJECT_SOURCE_DIR}/inc ${PROJECT_BINARY_DIR})
 
@@ -118,7 +125,9 @@ configure_file(
 )
 
 # ------------------------------------------------------------------------------------ #
-# Target library Tools Generating file lists
+# Target library Tools
+
+# Generating file lists
 file(GLOB TOOLS_SRC ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB TOOLS_INC ${PROJECT_SOURCE_DIR}/inc/*.hh)
 
@@ -137,9 +146,28 @@ install(
     LIBRARY DESTINATION ${INSTALL_LIB_DIR} COMPONENT lib
     PUBLIC_HEADER DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev
 )
+set(TOOLS_LIB ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libTools.so)
 
 # ------------------------------------------------------------------------------------ #
-# Create the package Add all targets to the build-tree export set
+# Target Cppyy binding
+message(STATUS "INSTALL_INCLUDE_DIR: ${INSTALL_INCLUDE_DIR}")
+# Generating the library
+cppyy_add_bindings(
+    "PyTools"
+    "${TOOLS_VERSION}"
+    "jgaffiot"
+    "j.gaffiot@laposte.net"
+    LANGUAGE_STANDARD "17"
+    INCLUDE_DIRS ${PROJECT_BINARY_DIR}/
+    LINK_LIBRARIES ${TOOLS_LIB}
+    H_DIRS ${PROJECT_SOURCE_DIR}/inc/
+    H_FILES ${TOOLS_INC}
+)
+add_dependencies(PyToolsCppyy Tools)
+
+
+# ------------------------------------------------------------------------------------ #
+# Create the package: add all targets to the build-tree export set
 export(TARGETS Tools FILE "${PROJECT_BINARY_DIR}/ToolsTargets.cmake")
 
 # Export the package for use from the build-tree (this registers the build-tree with a
@@ -153,8 +181,7 @@ set(CONF_INCLUDE_DIR "\${TOOLS_CMAKE_DIR}/${REL_INCLUDE_DIR}")
 file(RELATIVE_PATH REL_LIBRARY_DIR "${PROJECT_BINARY_DIR}" "${INSTALL_LIB_DIR}")
 set(CONF_LIBRARY_DIR "\${TOOLS_CMAKE_DIR}/${REL_LIBRARY_DIR}")
 
-# Create the ToolsConfig.cmake and ToolsConfigVersion.cmake files Create
-# ToolsConfig.cmake
+# Create ToolsConfig.cmake
 configure_file(ToolsConfig.cmake.in "${PROJECT_BINARY_DIR}/ToolsConfig.cmake" @ONLY)
 # Create ToolsConfigVersion.cmake
 configure_file(
