@@ -30,7 +30,8 @@ repos:
         description: Compile the project
         language: system
         always_run: true
-        entry: make
+        entry: make all
+        files: Makefile
 
       - id: clang-format
         name: Clang-format
