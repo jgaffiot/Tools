@@ -11,15 +11,22 @@
 
 #include <fstream>
 #include <iostream>
+#include <string>
 
 namespace tools
 {
 class DualStream {
 public:
-    DualStream(std::ostream& os = std::cout): screen_out(os) {}
-    DualStream(const char* output_file_name, std::ostream& os = std::cout);
-    DualStream(const std::string& output_file_name, std::ostream& os = std::cout);
+    explicit DualStream(std::ostream& os = std::cout): screen_out(os) {}
+    explicit DualStream(const char* output_file_name, std::ostream& os = std::cout);
+    explicit DualStream(
+        const std::string& output_file_name, std::ostream& os = std::cout);
+
     ~DualStream() { file_stream.close(); }
+    DualStream(const DualStream&) = delete;
+    DualStream(DualStream&&) = delete;
+    DualStream& operator=(const DualStream&) = delete;
+    DualStream& operator=(DualStream&&) = delete;
 
     bool Open(const char* output_file_name);
     inline bool Open(const std::string& output_file_name) {
@@ -57,9 +64,8 @@ inline DualStream& DualStream::operator<<(std::ostream& (*pfun)(std::ostream&)) 
 
 class DualStreamBuf {
 public:
-    DualStreamBuf(std::filebuf* buf, std::ostream& os = std::cout):
+    explicit DualStreamBuf(std::filebuf* buf, std::ostream& os = std::cout):
         file_buf(buf), screen_out(os) {}
-    ~DualStreamBuf() {}
 
     std::ostream& GetStream() { return file_buf; }
     std::ostream& Str() { return file_buf; }

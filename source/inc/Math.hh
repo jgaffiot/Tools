@@ -60,6 +60,7 @@ template<typename T>
 inline T square(T val) {
     return val * val;
 }
+// NOLINTNEXTLINE(runtime/int)
 inline unsigned long long int operator"" _sq(unsigned long long int val) {
     return val * val;
 }
@@ -71,6 +72,7 @@ template<typename T>
 inline T cube(T val) {
     return val * val * val;
 }
+// NOLINTNEXTLINE(runtime/int)
 inline unsigned long long int operator"" _cube(unsigned long long int val) {
     return val * val * val;
 }

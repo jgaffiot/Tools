@@ -29,7 +29,7 @@ public:
     }
 
     template<typename... Args>
-    except(Args... args): std::exception() {
+    except(Args... args): std::exception() {  // NOLINT(runtime/explicit)
         message = scat(args...);
     }
 

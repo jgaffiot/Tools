@@ -30,19 +30,19 @@ using Rand = Random<Vector3>;
 namespace detail_rand
 {
 template<class T>
-static auto test_setRThetaPhi(int)
+static auto test_setRThetaPhi(int)  // NOLINT(readability/casting)
     -> decltype(void(std::declval<T>().setRhoPhiTheta(0., 0., 0.)), std::true_type{});
 template<class T>
 static auto test_setRThetaPhi(float) -> std::false_type;
 
 template<class T>
-static auto test_setRhoPhiZ(int)
+static auto test_setRhoPhiZ(int)  // NOLINT(readability/casting)
     -> decltype(void(std::declval<T>().setRhoPhiZ(0., 0., 0.)), std::true_type{});
 template<class T>
 static auto test_setRhoPhiZ(float) -> std::false_type;
 
 template<class T>
-static auto test_setX(int)
+static auto test_setX(int)  // NOLINT(readability/casting)
     -> decltype(void(std::declval<T>().setX(0.)), std::true_type{});
 template<class T>
 static auto test_setX(float) -> std::false_type;

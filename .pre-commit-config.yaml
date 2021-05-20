@@ -1,0 +1,132 @@
+---
+exclude: ^(build/|install/)
+fail_fast: true
+minimum_pre_commit_version: 1.15.0
+
+repos:
+  - repo: local
+    hooks:
+# Python
+      - id: black
+        name: Black
+        entry: black
+        language: system
+        types: [python]
+      - id: flake8
+        name: Flake8
+        entry: flake8
+        language: system
+        types: [python]
+      - id: pyupgrade
+        name: PyUpgrade
+        entry: pyupgrade
+        language: system
+        types: [python]
+        args: [--py38-plus]
+
+# C++
+      - id: compilation
+        name: Compilation
+        description: Compile the project
+        language: system
+        always_run: true
+        entry: make all
+        files: Makefile
+
+      - id: clang-format
+        name: Clang-format
+        description: Run `clang-format` against C/C++ header and source files
+        language: system
+        files: \.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
+        entry: clang-format -i
+
+      - id: cpplint
+        name: CPPlint
+        description: Run `cpplint` against C/C++ header and source files
+        language: python
+        files: \.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
+        entry: cpplint
+
+      - id: cppcheck
+        name: CPPcheck
+        description: Run `cppcheck` against C/C++ source files
+        language: system
+        files: \.(c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
+        entry: cppcheck --error-exitcode=1
+        args: [--enable=warning]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: check-added-large-files
+      - id: forbid-new-submodules
+      - id: no-commit-to-branch
+        args: [--branch, master]
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        types: [text]
+      - id: fix-byte-order-marker
+        types: [text]
+      - id: mixed-line-ending
+        args: [--fix=lf]
+        types: [text]
+      - id: check-merge-conflict
+        types: [text]
+      - id: detect-private-key
+        types: [text]
+      - id: check-executables-have-shebangs
+        types: [text, executable]
+      - id: check-shebang-scripts-are-executable
+        types: [text]
+      - id: check-json
+        types: [json]
+      - id: pretty-format-json
+        types: [json]
+      - id: check-symlinks
+        types: [symlink]
+      - id: destroyed-symlinks
+      - id: check-toml
+        types: [toml]
+      - id: check-yaml
+        types: [yaml]
+      - id: name-tests-test
+        args: [--django]
+        files: (^|/)tests/.+\.py$
+      - id: check-ast
+        types: [python]
+      - id: check-builtin-literals
+        types: [python]
+      - id: check-docstring-first
+        types: [python]
+      - id: debug-statements
+        types: [python]
+      - id: fix-encoding-pragma
+        types: [python]
+      - id: requirements-txt-fixer
+
+  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+    rev: 0.1.0
+    hooks:
+      - id: yamlfmt
+        args: [--mapping, '2', --sequence, '4', --offset, '2', --width, '150']
+        types: [yaml]
+
+  #- repo: https://github.com/python/black
+    #rev: 21.5b1
+    #hooks:
+      #- id: black
+        #language_version: python3
+        #types: [python]
+
+  #- repo: https://gitlab.com/pycqa/flake8
+    #rev: 3.9.2
+    #hooks:
+      #- id: flake8
+        #types: [python]
+
+  #- repo: https://github.com/asottile/pyupgrade
+    #rev: v2.17.0
+    #hooks:
+      #- id: pyupgrade
+        #types: [python]
+        #args: ['--py38-plus']

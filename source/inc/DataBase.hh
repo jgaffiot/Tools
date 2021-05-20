@@ -43,7 +43,7 @@ public:
         except(arg, write) {}
 
     template<typename T>
-    database_except(const T& val): except(val) {}
+    explicit database_except(const T& val): except(val) {}
     template<typename T, typename... Args>
     database_except(const T& val, Args... args): except(val, args...) {}
 };
@@ -224,9 +224,12 @@ public:
 
 private:
     /// Constructors
-    DataBase(bool isreadonly) { IsReadOnly = isreadonly; }
-    DataBase(const DataBase&) = delete;
+    explicit DataBase(bool isreadonly) { IsReadOnly = isreadonly; }
     DataBase() = delete;
+    DataBase(const DataBase&) = delete;
+    DataBase(DataBase&&) = delete;
+    DataBase& operator=(const DataBase&) = delete;
+    DataBase& operator=(DataBase&&) = delete;
 
     /// Members
     bool IsReadOnly;  // read-only most of time, when reading values from map
@@ -321,8 +324,12 @@ private:
     // Constructor is private, so that only DataBase creates DataTable, thanks to the
     // friend declaration below
     DataTable(std::istream& is, std::string& line);
-    DataTable(const DataTable&) = delete;
     DataTable() = delete;
+    DataTable(const DataTable&) = delete;
+    DataTable(DataTable&&) = delete;
+    DataTable& operator=(const DataTable&) = delete;
+    DataTable& operator=(DataTable&&) = delete;
+
     friend void DataBase::ReadFile(std::istream&, std::string, EOverwrite);
 
     std::map<std::string, Col_t> ColMap;  // map of column vectors

@@ -1,6 +1,7 @@
 # IDE
 *.kdev4
 .kdev4/
+.idea/
 
 # Build and install
 build/*
