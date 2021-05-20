@@ -23,25 +23,33 @@ namespace tools
    are confused when they see strchr (s, '\0') in the code.  */
 #define move_to_end(ptr, str) ptr = strchr(str, '\0');
 
+namespace detail_bar
+{
+constexpr size_t kLargeSize = 80;
+constexpr size_t kSmallSize = 40;
+}  // namespace detail_bar
+
 void display_bar_cxx98_notime(
     char* disp,
-    const unsigned long whereami,
-    const unsigned long tot,
+    size_t n,
+    const uint64_t whereami,
+    const uint64_t tot,
     const bool kbs = true);
 void display_bar_cxx98(
     char* disp,
-    const unsigned long whereami,
-    const unsigned long tot,
+    size_t n,
+    const uint64_t whereami,
+    const uint64_t tot,
     const double init_time,
     const bool kbs = true);
-void display_end_bar(char* disp);
+void display_end_bar(char* disp, size_t n);
 
 ////////////////////////////////////////////////////////////////
 
 // C++ 11 version, a class using std::chrono
 class ProgressBar {
 public:
-    ProgressBar(double _NbIteration);
+    explicit ProgressBar(double _NbIteration);
 
     void Display(double current_iter);
     void DisplayEnd();
@@ -52,11 +60,12 @@ private:
 
     double NbIteration;
     double previous_iter = 0.;
-    char large_buffer[80], small_buffer[40];
+    char small_buffer[detail_bar::kSmallSize];
+    char large_buffer[detail_bar::kLargeSize];
     PBTP init, now, previous;
 
     constexpr static double ClockPeriod =
-        double(PBC::period::den) / double(PBC::period::num);
+        static_cast<double>(PBC::period::den) / static_cast<double>(PBC::period::num);
     constexpr static std::chrono::duration<PBC::rep, std::chrono::milliseconds::period>
         delta_t{500};
 };

@@ -10,6 +10,7 @@
 #define MAKE_UNIQUE_HH 1
 
 #include <memory>
+#include <utility>
 
 // make_unique is not part of C++11 (why ???), but is at least included in C++14
 

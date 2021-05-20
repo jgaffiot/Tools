@@ -7,12 +7,6 @@ repos:
   - repo: local
     hooks:
 # Python
-      - id: pyupgrade
-        name: PyUpgrade
-        entry: pyupgrade
-        language: system
-        types: [python]
-        args: [--py38-plus]
       - id: black
         name: Black
         entry: black
@@ -23,6 +17,12 @@ repos:
         entry: flake8
         language: system
         types: [python]
+      - id: pyupgrade
+        name: PyUpgrade
+        entry: pyupgrade
+        language: system
+        types: [python]
+        args: [--py38-plus]
 
 # C++
       - id: compilation
@@ -59,11 +59,6 @@ repos:
     hooks:
       - id: yamlfmt
         args: [--mapping, '2', --sequence, '4', --offset, '2', --width, '150']
-
-  - repo: git://github.com/doublify/pre-commit-clang-format
-    rev: master
-    hooks:
-      - id: clang-format
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1

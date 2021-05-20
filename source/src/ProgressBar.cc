@@ -22,12 +22,13 @@ using namespace tools;
 using namespace std;
 
 void display_bar_cxx98_notime(
-    char* disp, const unsigned long whereami, const unsigned long tot, const bool kbs) {
-    int progress = int(100. * double(whereami) / double(tot));
+    char* disp, size_t n, const uint64_t whereami, const uint64_t tot, const bool kbs) {
+    int progress = static_cast<int>(
+        100. * static_cast<double>(whereami) / static_cast<double>(tot));
     char* p = disp;
     struct timeval tv;
     static double previous_time = 0., previous = 0.;
-    std::sprintf(disp, "processed: %2d%%  ", progress);
+    std::snprintf(disp, n, "processed: %2d%%  ", progress);
     move_to_end(p, disp);
     *p++ = '[';
     for (int k = 0; k < 20; k++) {
@@ -42,35 +43,38 @@ void display_bar_cxx98_notime(
     *p++ = ']';
     *p++ = '\0';
     gettimeofday(&tv, 0);
-    char buffer[40];
-    double speed = (double(whereami) - previous * double(tot))
-                   / double(tv.tv_sec + 1.0e-6 * tv.tv_usec - previous_time) / 1024.;
+    char buffer[detail_bar::kSmallSize];
+    double speed =
+        (static_cast<double>(whereami) - previous * static_cast<double>(tot))
+        / static_cast<double>(tv.tv_sec + 1.0e-6 * tv.tv_usec - previous_time) / 1024.;
     if (kbs) {
-        std::sprintf(buffer, "  %.1f kB/s ", speed);
+        std::snprintf(buffer, detail_bar::kSmallSize, "  %.1f kB/s ", speed);
     } else {
-        std::sprintf(buffer, "  %.1f evts/s ", speed * 1024.);
+        std::snprintf(buffer, detail_bar::kSmallSize, "  %.1f evts/s ", speed * 1024.);
     }
-    strncat(disp, buffer, 40);
+    strncat(disp, buffer, detail_bar::kSmallSize);
     std::cout << "\r";
     std::cout << disp;
     std::cout.flush();
-    previous = double(whereami) / double(tot);
-    previous_time = double(tv.tv_sec + 1.0e-6 * tv.tv_usec);
+    previous = static_cast<double>(whereami) / static_cast<double>(tot);
+    previous_time = static_cast<double>(tv.tv_sec + 1.0e-6 * tv.tv_usec);
 }
 
 ////////////////////////////////////////////////////////////////
 
 void display_bar_cxx98(
     char* disp,
-    const unsigned long whereami,
-    const unsigned long tot,
+    size_t n,
+    const uint64_t whereami,
+    const uint64_t tot,
     const double init_time,
     const bool kbs) {
-    int progress = int(100. * double(whereami) / double(tot));
+    int progress = static_cast<int>(
+        100. * static_cast<double>(whereami) / static_cast<double>(tot));
     char* p = disp;
     struct timeval tv;
     static double previous_time = 0., previous = 0.;
-    std::sprintf(disp, "processed: %2d%%  ", progress);
+    std::snprintf(disp, n, "processed: %2d%%  ", progress);
     move_to_end(p, disp);
     *p++ = '[';
     for (int k = 0; k < 20; k++) {
@@ -85,29 +89,36 @@ void display_bar_cxx98(
     *p++ = ']';
     *p++ = '\0';
     gettimeofday(&tv, 0);
-    char buffer[40];
-    double speed = (double(whereami) - previous * double(tot))
-                   / double(tv.tv_sec + 1.0e-6 * tv.tv_usec - previous_time) / 1024.;
-    double average =
-        double(whereami) / double(tv.tv_sec + 1.0e-6 * tv.tv_usec - init_time) / 1024.;
+    char buffer[detail_bar::kSmallSize];
+    double speed =
+        (static_cast<double>(whereami) - previous * static_cast<double>(tot))
+        / static_cast<double>(tv.tv_sec + 1.0e-6 * tv.tv_usec - previous_time) / 1024.;
+    double average = static_cast<double>(whereami)
+                     / static_cast<double>(tv.tv_sec + 1.0e-6 * tv.tv_usec - init_time)
+                     / 1024.;
     if (kbs) {
-        std::sprintf(buffer, "  %.1f kB/s -> %.1f kB/s", speed, average);
+        std::snprintf(
+            buffer, detail_bar::kSmallSize, "  %.1f kB/s -> %.1f kB/s", speed, average);
     } else {
-        std::sprintf(
-            buffer, "  %.1f evts/s -> %.1f evts/s", speed * 1024., average * 1024.);
+        std::snprintf(
+            buffer,
+            detail_bar::kSmallSize,
+            "  %.1f evts/s -> %.1f evts/s",
+            speed * 1024.,
+            average * 1024.);
     }
-    strncat(disp, buffer, 40);
+    strncat(disp, buffer, detail_bar::kSmallSize);
     std::cout << "\r";
     std::cout << disp;
     std::cout.flush();
-    previous = double(whereami) / double(tot);
-    previous_time = double(tv.tv_sec + 1.0e-6 * tv.tv_usec);
+    previous = static_cast<double>(whereami) / static_cast<double>(tot);
+    previous_time = static_cast<double>(tv.tv_sec + 1.0e-6 * tv.tv_usec);
 }
 
 ////////////////////////////////////////////////////////////////
 
-void display_end_bar(char* disp) {
-    sprintf(disp, "processed: 100%% [====================]");
+void display_end_bar(char* disp, size_t n) {
+    snprintf(disp, n, "processed: 100%% [====================]");
     std::cout << "\r";
     std::cout << disp;
     std::cout.flush();
@@ -132,8 +143,8 @@ void ProgressBar::Display(double current_iter) {
     }
 
     char* p = large_buffer;
-    int progress = int(100. * current_iter / NbIteration);
-    sprintf(large_buffer, "processed: %2d%%  ", progress);
+    int progress = static_cast<int>(100. * current_iter / NbIteration);
+    snprintf(large_buffer, detail_bar::kLargeSize, "processed: %2d%%  ", progress);
     move_to_end(p, large_buffer);
 
     *p++ = '[';
@@ -149,12 +160,18 @@ void ProgressBar::Display(double current_iter) {
     *p++ = ']';
     *p++ = '\0';
 
-    double speed =
-        (current_iter - previous_iter) / double((now - previous).count()) * ClockPeriod;
-    double average = current_iter / double((now - init).count()) * ClockPeriod;
+    double speed = (current_iter - previous_iter)
+                   / static_cast<double>((now - previous).count()) * ClockPeriod;
+    double average =
+        current_iter / static_cast<double>((now - init).count()) * ClockPeriod;
 
-    sprintf(small_buffer, "  %.1f evts/s -> %.1f evts/s", speed, average);
-    strncat(large_buffer, small_buffer, 40);
+    snprintf(
+        small_buffer,
+        detail_bar::kSmallSize,
+        "  %.1f evts/s -> %.1f evts/s",
+        speed,
+        average);
+    strncat(large_buffer, small_buffer, detail_bar::kSmallSize);
 
     cout << "\r" << large_buffer;
     cout.flush();

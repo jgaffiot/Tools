@@ -19,8 +19,8 @@ namespace tools
 {
 class Regex {
 public:
-    Regex(const char* pattern) { theRegex.assign(pattern); }
-    Regex(const std::string pattern) { theRegex.assign(pattern); }
+    explicit Regex(const char* pattern) { theRegex.assign(pattern); }
+    explicit Regex(const std::string pattern) { theRegex.assign(pattern); }
 
     inline int Match(const char* const str);
     inline const std::vector<std::string>& Split(const char* const str);
