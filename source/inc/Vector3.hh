@@ -26,7 +26,7 @@ public:
         if (i < 3) {
             return v[i];
         }
-        throw except("Vector3::operator(): index too high: ", i, " > 2");
+        throw Error("Vector3::operator(): index too high: ", i, " > 2");
     }
     inline double at(std::size_t i) const { return v.at(i); }
     inline double x() const { return v[0]; }

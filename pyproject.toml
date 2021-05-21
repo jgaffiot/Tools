@@ -41,14 +41,14 @@ exclude = '''
 [tool.pytest.ini_options]
 addopts = '''
     -vv
-#      -s
     --exitfirst
     --capture=no
     --showlocals
-    --black
-    --flake8
-    --forked
 '''
+#      -s
+#     --black
+#     --flake8
+#     --forked
 python_files = "*.py"
 testpaths = "test"
 norecursedirs = '''

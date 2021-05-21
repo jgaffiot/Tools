@@ -18,18 +18,18 @@
 
 namespace tools
 {
-class except: public std::exception {
+class Error: public std::exception {
 public:
-    virtual ~except() noexcept {}
+    virtual ~Error() noexcept {}
 
-    explicit except(const std::string& arg): std::exception(), message(arg) {}
-    explicit except(const std::string& arg, std::ofstream& write):
+    explicit Error(const std::string& arg): std::exception(), message(arg) {}
+    explicit Error(const std::string& arg, std::ofstream& write):
         std::exception(), message(arg) {
         write << message << std::endl;
     }
 
     template<typename... Args>
-    except(const std::string& arg, Args... args): std::exception() {
+    Error(const std::string& arg, Args... args): std::exception() {
         message = scat(arg, args...);
     }
 

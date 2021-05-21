@@ -36,16 +36,16 @@ class DataTable;
 ////////////////////////// exception ///////////////////////////
 ////////////////////////////////////////////////////////////////
 
-class database_except: public except {
+class database_except: public Error {
 public:
-    explicit database_except(const std::string& arg): except(arg) {}
+    explicit database_except(const std::string& arg): Error(arg) {}
     explicit database_except(const std::string& arg, std::ofstream& write):
-        except(arg, write) {}
+        Error(arg, write) {}
 
     template<typename T>
-    explicit database_except(const T& val): except(val) {}
+    explicit database_except(const T& val): Error(val) {}
     template<typename T, typename... Args>
-    database_except(const T& val, Args... args): except(val, args...) {}
+    database_except(const T& val, Args... args): Error(val, args...) {}
 };
 
 ////////////////////////////////////////////////////////////////

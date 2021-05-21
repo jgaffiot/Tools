@@ -60,9 +60,14 @@ mark_as_advanced(Cppyy_VERSION)
 #
 # Generate setup.py from the setup.py.in template.
 #
-function(cppyy_generate_setup pkg version lib_so_file rootmap_file pcm_file map_file)
+function(cppyy_generate_setup
+    pkg version author email license lib_so_file rootmap_file pcm_file map_file)
     set(SETUP_PY_FILE ${CMAKE_CURRENT_BINARY_DIR}/setup.py)
     set(CPPYY_PKG ${pkg})
+    set(PROJECT_VERSION ${version})
+    set(AUTHOR ${author})
+    set(EMAIL ${email})
+    set(BINDINGS_LICENSE ${license})
     get_filename_component(CPPYY_LIB_SO ${lib_so_file} NAME)
     get_filename_component(CPPYY_ROOTMAP ${rootmap_file} NAME)
     get_filename_component(CPPYY_PCM ${pcm_file} NAME)
@@ -90,10 +95,8 @@ function(cppyy_generate_init)
     get_filename_component(CPPYY_LIB_SO ${ARG_LIB_FILE} NAME)
     get_filename_component(CPPYY_MAP ${ARG_MAP_FILE} NAME)
 
-    string(REPLACE "${ARG_NAMESPACES}" ";" ", " _namespaces)
-
     if(NOT "${ARG_NAMESPACES}" STREQUAL "")
-        string(REPLACE "${ARG_NAMESPACES}" ";" ", " _namespaces)
+        string(REPLACE ";" ", " _namespaces "${ARG_NAMESPACES}")
         set(NAMESPACE_INJECTIONS "from cppyy.gbl import ${_namespaces}")
     else()
         set(NAMESPACE_INJECTIONS "")
@@ -500,9 +503,12 @@ function(cppyy_add_bindings pkg pkg_version author author_email)
 
     #
     # Generate setup.py
-    #
+    #  author email license
     cppyy_generate_setup(${pkg}
                          ${pkg_version}
+                         ${author}
+                         ${author_email}
+                         ${ARG_LICENSE}
                          ${lib_file}
                          ${rootmap_file}
                          ${pcm_file}
@@ -519,7 +525,6 @@ function(cppyy_add_bindings pkg pkg_version author author_email)
     # Copy initializor
     #
     set(initializor ${CMAKE_CURRENT_BINARY_DIR}/initializor.py)
-    message(STATUS ${BACKEND_PREFIX}/pkg_templates/initializor.py)
     if (EXISTS ${BACKEND_PREFIX}/pkg_templates/initializor.py)
        file(COPY ${BACKEND_PREFIX}/pkg_templates/initializor.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${pkg} USE_SOURCE_PERMISSIONS)
     endif()

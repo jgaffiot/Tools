@@ -30,7 +30,7 @@ repos:
         description: Compile the project
         language: system
         always_run: true
-        entry: make all
+        entry: make -j all
         files: Makefile
 
       - id: clang-format
@@ -99,8 +99,6 @@ repos:
       - id: check-docstring-first
         types: [python]
       - id: debug-statements
-        types: [python]
-      - id: fix-encoding-pragma
         types: [python]
       - id: requirements-txt-fixer
 

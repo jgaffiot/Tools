@@ -6,6 +6,7 @@ set_property(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
 # ------------------------------------------------------------------------------------ #
 # Declaring the project
 project(tools)
+set(REPOSITORY_DIR ${PROJECT_SOURCE_DIR}/../)
 
 # ------------------------------------------------------------------------------------ #
 # Set version
@@ -107,12 +108,22 @@ set(CMAKE_CXX_FLAGS
 # ------------------------------------------------------------------------------------ #
 # Get the Cppyy and clang package
 execute_process(
-  COMMAND cling-config --cmake
-  OUTPUT_VARIABLE CPPYY_MODULE_PATH
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
+    COMMAND bash -c "poetry show cppyy-backend | cut -d: -f2 | sed -n 2p"
+    OUTPUT_VARIABLE CPPYY_BACKEND_VERSION
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+message(STATUS "CPPYY_BACKEND_VERSION: ${CPPYY_BACKEND_VERSION}")
+
+if(${CPPYY_BACKEND_VERSION} LESS_EQUAL 1.14.5)
+    # Until version 1.14.5, use corrected cmake scripts to find Cppyy and libClang
+    list(APPEND CMAKE_MODULE_PATH ${REPOSITORY_DIR}/cmake)
+endif()
+execute_process(
+    COMMAND cling-config --cmake
+    OUTPUT_VARIABLE CPPYY_MODULE_PATH
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
 list(APPEND CMAKE_MODULE_PATH ${CPPYY_MODULE_PATH})
 find_package(Cppyy REQUIRED)
-# find_package(Clang 11 REQUIRED)
 
 # ------------------------------------------------------------------------------------ #
 # Set the headers directory
@@ -157,14 +168,22 @@ cppyy_add_bindings(
     "${TOOLS_VERSION}"
     "jgaffiot"
     "j.gaffiot@laposte.net"
+    LICENSE "LGPL-3.0-or-later"
+    LICENSE_FILE ${REPOSITORY_DIR}/LICENSE
+    README_FILE ${REPOSITORY_DIR}/README.md
     LANGUAGE_STANDARD "17"
+    NAMESPACES "tools"
+#     LINKDEFS ${PROJECT_SOURCE_DIR}/Linkdef.h
     INCLUDE_DIRS ${PROJECT_BINARY_DIR}/
     LINK_LIBRARIES ${TOOLS_LIB}
     H_DIRS ${PROJECT_SOURCE_DIR}/inc/
     H_FILES ${TOOLS_INC}
 )
 add_dependencies(PyToolsCppyy Tools)
-
+install(CODE "message(STATUS \"Attempting pip install\" ${PY_WHEEL_FILE})"
+    CODE "execute_process(COMMAND poetry run pip install --force-reinstall
+        ${PY_WHEEL_FILE})"
+)
 
 # ------------------------------------------------------------------------------------ #
 # Create the package: add all targets to the build-tree export set
