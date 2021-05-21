@@ -8,16 +8,13 @@ exclude =
     build,
     install,
     .pytest_cache,
+    pkg_templates/*,
 
 # it's not a bug that we aren't using all of hacking
 ignore =
-    # H104: file contains nothing but comments
-    H104
-    # H301: one import per line
-    H301,
-    # H306: imports not in alphabetical order (time, os)
-    H306,
-    # W503: line break before binary operator
-    W503
-    # E203: whitespace before ':', because of slicing (such as list[2 : 3])
-    E203
+    H104, # file contains nothing but comments (OK for __init__.py)
+    H301, # one import per line (too restrictive)
+    H306, # imports not in alphabetical order (time, os) (boring and of little use)
+    W503, # line break before binary operator (useless with black)
+    E203, # whitespace before ':' (useless with black)
+    S101  # use of assert detected (useless with pytest)

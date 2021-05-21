@@ -21,12 +21,15 @@ public:
     Vector3() {}
     Vector3(double x, double y, double z): v({x, y, z}) {}
 
+    inline bool operator==(const Vector3& other) {
+        return v[0] == other.x() and v[1] == other.x() and v[2] == other.z();
+    }
     inline double operator[](std::size_t i) const { return v[i]; }
     inline double operator()(std::size_t i) const {
         if (i < 3) {
             return v[i];
         }
-        throw except("Vector3::operator(): index too high: ", i, " > 2");
+        throw Error("Vector3::operator(): index too high: ", i, " > 2");
     }
     inline double at(std::size_t i) const { return v.at(i); }
     inline double x() const { return v[0]; }

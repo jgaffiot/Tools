@@ -2,12 +2,14 @@ RELEASE_DIR := ./build/release/
 DEBUG_DIR   := ./build/debug/
 
 TOOLS_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-MAKE += --no-print-directory
-CMAKE := cmake $(TOOLS_DIR)/source #--trace --debug-output
+CMAKE := cmake $(TOOLS_DIR)/source
 FLAG := -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-ifdef DEBUG
-	FLAG += -DDEBUG=$(DEBUG)
+ifdef DEBUG_BUILD
+	CMAKE += --trace --debug-output
+	MAKE += --trace -d
+else
+	MAKE += --no-print-directory
 endif
 
 all: install_release

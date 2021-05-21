@@ -33,6 +33,7 @@ namespace detail_rand
 // be tested by "after C++14"
 #if __cplusplus > 201402L
 // void_t is already defined for C++17
+using std::void_t;
 #else
 template<class...>
 using void_t = void;
