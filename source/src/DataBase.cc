@@ -40,12 +40,12 @@ DataBase* DataBase::theDataBase = nullptr;
 // Get the absolute path from environment
 string DataBase::GetPath(const char* env_path) const {
     if (env_path == nullptr) {
-        throw database_except(" ***Error DataBase::GetPath()1: env_path is empty");
+        throw DataBaseError(" ***Error DataBase::GetPath()1: env_path is empty");
     }
 
     char* env = getenv(env_path);
     if (not env) {
-        throw database_except(
+        throw DataBaseError(
             " ***Error DataBase::GetPath()2: env_path is not defined: ", env_path);
     }
 
@@ -63,7 +63,7 @@ string DataBase::GetPath(const char* env_path) const {
  */
 void DataBase::ReadFile(istream& is, string prefix, DataBase::EOverwrite overwrite) {
     if (IsReadOnly) {
-        throw database_except(" ***Error DataBase::ReadFile1: Read-only database");
+        throw DataBaseError(" ***Error DataBase::ReadFile1: Read-only database");
     }
 
     if (not prefix.empty()) {
@@ -101,14 +101,14 @@ void DataBase::ReadFile(istream& is, string prefix, DataBase::EOverwrite overwri
             // Get the table name
             Regex regName("=(\\w+)=");
             if (not regName.Match(str)) {
-                throw database_except(
+                throw DataBaseError(
                     " ***Error DataBase::ReadFile2: Can not find table name in line: ",
                     str);
             }
             const string tablename = regName.at(1);
 
             if (TableMap.count(tablename) != 0) {
-                throw database_except(
+                throw DataBaseError(
                     " ***Error DataBase::ReadFile3: Attempt to redefine already "
                     "defined table: ",
                     tablename);
@@ -182,7 +182,7 @@ void DataBase::ReadFile(
     }
 
     if (IsReadOnly) {
-        throw database_except(
+        throw DataBaseError(
             " ***Error DataBase::ReadFile2: Read-only database, can not update: ",
             FileWithPath);
     }
@@ -194,7 +194,7 @@ void DataBase::ReadFile(
     ifstream ifs;
     ifs.open(FileWithPath, std::ios::in);
     if (! ifs.is_open() || ! ifs.good()) {
-        throw database_except(
+        throw DataBaseError(
             " ***Error DataBase::ReadFile3: Could not open: ", FileWithPath);
     }
 
@@ -247,8 +247,7 @@ void DataBase::WriteText(const char* filename, const char* env_path) const {
     ofstream ofs;
     ofs.open(filename, std::ios::out);
     if (! ofs.is_open() || ! ofs.good()) {
-        throw database_except(
-            " ***Error DataBase::WriteText: Could not open ", filename);
+        throw DataBaseError(" ***Error DataBase::WriteText: Could not open ", filename);
     }
 
     WriteText(ofs);
@@ -262,7 +261,7 @@ double DataBase::GetNumValue(const string& key) const {
         // if application code is using this method, it's just reading the db, not
         // assigning to it. This is always an error in DataBase if the key is not yet
         // defined.
-        throw database_except(
+        throw DataBaseError(
             " ***Error DataBase::GetNumValue: Attempt to retrieve undefined key ", key);
     }
     return NumMap.at(key);
@@ -272,7 +271,7 @@ double DataBase::GetNumValue(const string& key) const {
 
 const string& DataBase::GetStrValue(const string& key) const {
     if (StringMap.count(key) == 0) {
-        throw database_except(
+        throw DataBaseError(
             " ***Error DataBase::GetStrValue: Attempt to retrieve undefined key ", key);
     }
     return StringMap.at(key);
@@ -282,7 +281,7 @@ const string& DataBase::GetStrValue(const string& key) const {
 
 double& DataBase::operator[](const string& key) {
     if (IsReadOnly) {
-        throw database_except(
+        throw DataBaseError(
             " ***Error DataBase::operator[]: Attempt to modify read-only base: ", key);
     }
     if (NumMap.count(key) != 0) {
@@ -301,7 +300,7 @@ double& DataBase::operator[](const string& key) {
 
 string& DataBase::operator()(const string& key) {
     if (IsReadOnly) {
-        throw database_except(
+        throw DataBaseError(
             " ***Error DataBase::operator()1: Attempt to modify read-only base: ", key);
     }
     if (StringMap.count(key) != 0) {
@@ -320,7 +319,7 @@ string& DataBase::operator()(const string& key) {
 
 const std::shared_ptr<DataTable> DataBase::GetTablePtr(const char* name) const {
     if (TableMap.count(string(name)) == 0) {
-        throw database_except(
+        throw DataBaseError(
             " ***Error DataBase::GetTable:Attempt to access undefined table ", name);
     }
     return TableMap.at(string(name));
@@ -330,8 +329,7 @@ const std::shared_ptr<DataTable> DataBase::GetTablePtr(const char* name) const {
 
 vector<double> DataTable::GetColumnAsNum(const string& colname) const {
     if (ColMap.count(colname) == 0) {
-        throw database_except(
-            " ***Error DataTable::GetColumnAsNum: Unknown : ", colname);
+        throw DataBaseError(" ***Error DataTable::GetColumnAsNum: Unknown : ", colname);
     }
 
     vector<double> v;
@@ -397,7 +395,7 @@ DataTable::DataTable(std::istream& is, std::string& line) {
 
         // parse the line
         if (regSpace.Split(line).size() - 1 != NbCol) {
-            throw database_except(
+            throw DataBaseError(
                 " ***Error DataTable::DataTable1: Bad line, expected ",
                 NbCol,
                 " columns, got ",

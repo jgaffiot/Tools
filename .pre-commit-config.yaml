@@ -25,14 +25,6 @@ repos:
         args: [--py38-plus]
 
 # C++
-      - id: compilation
-        name: Compilation
-        description: Compile the project
-        language: system
-        always_run: true
-        entry: make -j all
-        files: Makefile
-
       - id: clang-format
         name: Clang-format
         description: Run `clang-format` against C/C++ header and source files
@@ -54,6 +46,14 @@ repos:
         files: \.(c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
         entry: cppcheck --error-exitcode=1
         args: [--enable=warning]
+
+      - id: compilation
+        name: Compilation
+        description: Compile the project
+        language: system
+        always_run: true
+        entry: make -j all
+        files: Makefile
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1

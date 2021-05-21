@@ -36,16 +36,16 @@ class DataTable;
 ////////////////////////// exception ///////////////////////////
 ////////////////////////////////////////////////////////////////
 
-class database_except: public Error {
+class DataBaseError: public Error {
 public:
-    explicit database_except(const std::string& arg): Error(arg) {}
-    explicit database_except(const std::string& arg, std::ofstream& write):
+    explicit DataBaseError(const std::string& arg): Error(arg) {}
+    explicit DataBaseError(const std::string& arg, std::ofstream& write):
         Error(arg, write) {}
 
     template<typename T>
-    explicit database_except(const T& val): Error(val) {}
+    explicit DataBaseError(const T& val): Error(val) {}
     template<typename T, typename... Args>
-    database_except(const T& val, Args... args): Error(val, args...) {}
+    DataBaseError(const T& val, Args... args): Error(val, args...) {}
 };
 
 ////////////////////////////////////////////////////////////////
@@ -300,7 +300,7 @@ public:
     std::vector<double> GetColumnAsNum(const std::string& colname) const;
     inline const Col_t& GetColumn(const std::string& colname) const {
         if (ColMap.count(colname) == 0) {
-            throw database_except(
+            throw DataBaseError(
                 " ***Error DataTable::operator[]: Unknown column ", colname);
         }
         return ColMap.at(colname);
@@ -311,7 +311,7 @@ public:
     }
     inline double operator()(const std::string& colname, int iRow) const {
         if (iRow < 0 or iRow >= NbRow) {
-            throw database_except(
+            throw DataBaseError(
                 " ***Error DataTable::operator(): No line number: ", iRow);
         }
         return std::stod(GetColumn(colname).at(iRow));

@@ -21,6 +21,9 @@ public:
     Vector3() {}
     Vector3(double x, double y, double z): v({x, y, z}) {}
 
+    inline bool operator==(const Vector3& other) {
+        return v[0] == other.x() and v[1] == other.x() and v[2] == other.z();
+    }
     inline double operator[](std::size_t i) const { return v[i]; }
     inline double operator()(std::size_t i) const {
         if (i < 3) {
