@@ -140,8 +140,8 @@ public:
         Z = 2
     };
 
-    inline static auto GetSeed() { return theSeed; }
-    inline static auto GetGenerator() { return theGenerator; }
+    inline static auto GetSeed() -> decltype(theSeed) { return theSeed; }
+    inline static auto GetGenerator() -> decltype(theGenerator) { return theGenerator; }
 
     inline static double Uniform() { return uniform_real_distro(theGenerator); }
     inline static double Uniform(double max) {

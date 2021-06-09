@@ -9,6 +9,7 @@
 #ifndef STRING_HH
 #define STRING_HH 1
 
+#include <cstring>
 #include <sstream>
 #include <string>
 #include <utility>
@@ -33,14 +34,17 @@ template<typename... Args>
 inline const char* cat(Args&&... args) {
     std::ostringstream oss;
     detail_string::PushToStream(oss, std::forward<Args>(args)...);
-    return oss.str().c_str();
+    size_t len = std::strlen(oss.str().c_str()) + 1;
+    char* new_str = new char[len];
+    std::snprintf(new_str, len, "%s", oss.str().c_str());
+    return new_str;
 }
 
 template<typename... Args>
 inline std::string scat(Args&&... args) {
     std::ostringstream oss;
     detail_string::PushToStream(oss, std::forward<Args>(args)...);
-    return std::move(oss.str());
+    return oss.str();
 }
 
 // stuff for emulation of switch with strings
