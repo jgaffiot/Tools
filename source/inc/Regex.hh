@@ -44,39 +44,37 @@ public:
     inline int Nb() const { return theTokens.size(); }
     inline int NbMatch() const { return theTokens.size(); }
     inline int GetNbMatch() const { return theTokens.size(); }
-    inline const std::string& at(uint i) const { return theTokens.at(i); }  // test on i
-    inline const std::string& operator()(uint i) const {
-        return theTokens.at(i);
-    }  // test on i
+    inline const std::string& at(uint i) const { return theTokens.at(i); }
+    inline const std::string& operator()(uint i) const { return theTokens.at(i); }
     inline const std::string& operator[](uint i) const {
         return theTokens[i];
     }  // no test
 
     // integrated cast to all numeric types
-    inline auto stoi(uint i) const {
+    inline auto stoi(uint i) -> decltype(std::stoi(std::string())) const {
         return std::stoi(theTokens.at(i), nullptr);
-    }  // test on i
-    inline auto stol(uint i) const {
+    }
+    inline auto stol(uint i) -> decltype(std::stol(std::string())) const {
         return std::stol(theTokens.at(i), nullptr);
-    }  // test on i
-    inline auto stoul(uint i) const {
+    }
+    inline auto stoul(uint i) -> decltype(std::stoul(std::string())) const {
         return std::stoul(theTokens.at(i), nullptr);
-    }  // test on i
-    inline auto stoll(uint i) const {
+    }
+    inline auto stoll(uint i) -> decltype(std::stoll(std::string())) const {
         return std::stoll(theTokens.at(i), nullptr);
-    }  // test on i
-    inline auto stoull(uint i) const {
+    }
+    inline auto stoull(uint i) -> decltype(std::stoull(std::string())) const {
         return std::stoull(theTokens.at(i), nullptr);
-    }  // test on i
-    inline auto stof(uint i) const {
+    }
+    inline auto stof(uint i) -> decltype(std::stof(std::string())) const {
         return std::stof(theTokens.at(i), nullptr);
-    }  // test on i
-    inline auto stod(uint i) const {
+    }
+    inline auto stod(uint i) -> decltype(std::stod(std::string())) const {
         return std::stod(theTokens.at(i), nullptr);
-    }  // test on i
-    inline auto stold(uint i) const {
+    }
+    inline auto stold(uint i) -> decltype(std::stold(std::string())) const {
         return std::stold(theTokens.at(i), nullptr);
-    }  // test on i
+    }
     inline const std::vector<std::string>& GetTokens() const { return theTokens; }
     inline const std::vector<std::string>& GetSplitResults() const { return theTokens; }
 

@@ -9,11 +9,44 @@ project(tools)
 set(REPOSITORY_DIR ${PROJECT_SOURCE_DIR}/../)
 
 # ------------------------------------------------------------------------------------ #
-# Set version
-set(TOOLS_MAJOR_VERSION 1)
-set(TOOLS_MINOR_VERSION 0)
-set(TOOLS_PATCH_VERSION 0)
+# Set version from the git tag
+find_package(Git)
+if(NOT GIT_FOUND)
+    message(FATAL_ERROR "Git not found")
+endif()
+execute_process(
+    COMMAND "${GIT_EXECUTABLE}" describe --tags
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    RESULT_VARIABLE git_result
+    OUTPUT_VARIABLE git_tag
+    ERROR_VARIABLE git_error
+    OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_STRIP_TRAILING_WHITESPACE
+)
+if(NOT git_result EQUAL 0)
+    message(FATAL_ERROR "Failed to execute Git: ${git_error}")
+endif()
+if(git_tag MATCHES
+   "^v([1-9][0-9]*)[.]([0-9]+)([.]([0-9]+))?-?([0-9]+)?(-g([0-9a-f-]+))?$"
+)
+    set(TOOLS_MAJOR_VERSION "${CMAKE_MATCH_1}")
+    set(TOOLS_MINOR_VERSION "${CMAKE_MATCH_2}")
+    set(TOOLS_PATCH_VERSION "${CMAKE_MATCH_4}")
+    set(NB_COMMIT "${CMAKE_MATCH_5}")
+    set(GIT_HASH "${CMAKE_MATCH_7}")
+else()
+    message(FATAL_ERROR "Git tag isn't valid semantic version: [${git_tag}]")
+endif()
+
+if("${TOOLS_PATCH_VERSION}" STREQUAL "")
+    set(TOOLS_PATCH_VERSION 0)
+endif()
 set(TOOLS_VERSION ${TOOLS_MAJOR_VERSION}.${TOOLS_MINOR_VERSION}.${TOOLS_PATCH_VERSION})
+if(NOT "${GIT_HASH}" EQUAL "")
+    message(STATUS "Tools base version: ${TOOLS_VERSION}")
+    message(STATUS "Commit: ${GIT_HASH}, ${NB_COMMIT} commits above latest version")
+else()
+    message(STATUS "Tools version: ${TOOLS_VERSION}")
+endif()
 
 # ------------------------------------------------------------------------------------ #
 # Set compilation version
@@ -106,26 +139,6 @@ set(CMAKE_CXX_FLAGS
 )
 
 # ------------------------------------------------------------------------------------ #
-# Get the Cppyy and clang package
-execute_process(
-    COMMAND bash -c "poetry show cppyy-backend | cut -d: -f2 | sed -n 2p"
-    OUTPUT_VARIABLE CPPYY_BACKEND_VERSION
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-message(STATUS "CPPYY_BACKEND_VERSION: ${CPPYY_BACKEND_VERSION}")
-
-if(${CPPYY_BACKEND_VERSION} LESS_EQUAL 1.14.5)
-    # Until version 1.14.5, use corrected cmake scripts to find Cppyy and libClang
-    list(APPEND CMAKE_MODULE_PATH ${REPOSITORY_DIR}/cmake)
-endif()
-execute_process(
-    COMMAND cling-config --cmake
-    OUTPUT_VARIABLE CPPYY_MODULE_PATH
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-list(APPEND CMAKE_MODULE_PATH ${CPPYY_MODULE_PATH})
-find_package(Cppyy REQUIRED)
-
-# ------------------------------------------------------------------------------------ #
 # Set the headers directory
 include_directories(${PROJECT_SOURCE_DIR}/inc ${PROJECT_BINARY_DIR})
 
@@ -158,32 +171,6 @@ install(
     PUBLIC_HEADER DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev
 )
 set(TOOLS_LIB ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libTools.so)
-
-# ------------------------------------------------------------------------------------ #
-# Target Cppyy binding
-message(STATUS "INSTALL_INCLUDE_DIR: ${INSTALL_INCLUDE_DIR}")
-# Generating the library
-cppyy_add_bindings(
-    "PyTools"
-    "${TOOLS_VERSION}"
-    "jgaffiot"
-    "j.gaffiot@laposte.net"
-    LICENSE "LGPL-3.0-or-later"
-    LICENSE_FILE ${REPOSITORY_DIR}/LICENSE
-    README_FILE ${REPOSITORY_DIR}/README.md
-    LANGUAGE_STANDARD "17"
-    NAMESPACES "tools"
-    LINKDEFS ${PROJECT_SOURCE_DIR}/Linkdef.h
-    INCLUDE_DIRS ${PROJECT_BINARY_DIR}/
-    LINK_LIBRARIES ${TOOLS_LIB}
-    H_DIRS ${PROJECT_SOURCE_DIR}/inc/
-    H_FILES ${TOOLS_INC}
-)
-add_dependencies(PyToolsCppyy Tools)
-install(CODE "message(STATUS \"Attempting pip install\" ${PY_WHEEL_FILE})"
-    CODE "execute_process(COMMAND poetry run pip install --force-reinstall
-        ${PY_WHEEL_FILE})"
-)
 
 # ------------------------------------------------------------------------------------ #
 # Create the package: add all targets to the build-tree export set
@@ -221,4 +208,66 @@ install(
     EXPORT ToolsTargets
     DESTINATION "${INSTALL_CMAKE_DIR}"
     COMPONENT dev
+)
+
+# ------------------------------------------------------------------------------------ #
+# Get the Cppyy and clang package
+execute_process(
+    COMMAND bash -c "poetry show cppyy-backend | cut -d: -f2 | sed -n 2p"
+    OUTPUT_VARIABLE CPPYY_BACKEND_VERSION
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+message(STATUS "CPPYY_BACKEND_VERSION: ${CPPYY_BACKEND_VERSION}")
+
+if(${CPPYY_BACKEND_VERSION} LESS_EQUAL 1.14.5)
+    # Until version 1.14.5, use corrected cmake scripts to find Cppyy and libClang
+    list(APPEND CMAKE_MODULE_PATH ${REPOSITORY_DIR}/cmake)
+endif()
+execute_process(
+    COMMAND cling-config --cmake
+    OUTPUT_VARIABLE CPPYY_MODULE_PATH
+    ERROR_VARIABLE CPPYY_MODULE_ERROR
+    OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_STRIP_TRAILING_WHITESPACE
+)
+if (NOT CPPYY_MODULE_ERROR EQUAL 0)
+    message(STATUS "Cppyy has not been installed, skipping the Python binding")
+    return()
+endif()
+list(APPEND CMAKE_MODULE_PATH ${CPPYY_MODULE_PATH})
+find_package(Cppyy REQUIRED)
+
+# ------------------------------------------------------------------------------------ #
+# Target Cppyy binding
+message(STATUS "INSTALL_INCLUDE_DIR: ${INSTALL_INCLUDE_DIR}")
+# Generating the library
+cppyy_add_bindings(
+    "PyTools"
+    "${TOOLS_VERSION}"
+    "jgaffiot"
+    "j.gaffiot@laposte.net"
+    LICENSE
+    "LGPL-3.0-or-later"
+    LICENSE_FILE
+    ${REPOSITORY_DIR}/LICENSE
+    README_FILE
+    ${REPOSITORY_DIR}/README.md
+    LANGUAGE_STANDARD
+    "17"
+    NAMESPACES
+    "tools"
+    LINKDEFS
+    ${PROJECT_SOURCE_DIR}/Linkdef.h
+    INCLUDE_DIRS
+    ${PROJECT_BINARY_DIR}/
+    LINK_LIBRARIES
+    ${TOOLS_LIB}
+    H_DIRS
+    ${PROJECT_SOURCE_DIR}/inc/
+    H_FILES
+    ${TOOLS_INC}
+)
+add_dependencies(PyToolsCppyy Tools)
+install(CODE "message(STATUS \"Attempting pip install\" ${PY_WHEEL_FILE})"
+        CODE "execute_process(COMMAND poetry run pip install --force-reinstall
+        ${PY_WHEEL_FILE})"
 )
