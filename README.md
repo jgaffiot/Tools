@@ -39,7 +39,10 @@ The installation step is required, because some headers are generated
 at the compilation step in the `build/` subdirectories, so all the headers
 are only available in one place after installation.
 
-The library
+The library contains an optional binding to Python, based on
+[Cppyy](https://cppyy.readthedocs.io). The binding will be automatically generated
+at the compilation if the optional prerequisites are installed and the Python
+virtual environment activated (with `poetry shell`).
 
 ### Prerequisites
 Required:
