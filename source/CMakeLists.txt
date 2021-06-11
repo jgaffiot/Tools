@@ -49,6 +49,15 @@ else()
 endif()
 
 # ------------------------------------------------------------------------------------ #
+# Set default C++ standard to C++17
+set(CMAKE_CXX_STANDARD 17)
+# set(CMAKE_CXX_STANDARD_REQUIRED True)
+# Set warnings
+set(CMAKE_CXX_FLAGS
+    "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wno-long-long -Wno-vla"
+)
+
+# ------------------------------------------------------------------------------------ #
 # Set compilation version
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
     set(DEBUG 1)
@@ -127,16 +136,6 @@ if(USE_ROOT)
     # Add the path to the ROOT headers
     include_directories(SYSTEM ${ROOT_INCLUDE_DIRS})
 endif(USE_ROOT)
-
-# ------------------------------------------------------------------------------------ #
-# Set compiler option Set C++ 17 if not already set
-if(NOT CMAKE_CXX_FLAGS MATCHES "-std=c\\+\\+")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
-endif()
-# Set warnings
-set(CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Wno-long-long -Wno-vla"
-)
 
 # ------------------------------------------------------------------------------------ #
 # Set the headers directory

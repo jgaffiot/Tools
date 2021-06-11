@@ -15,7 +15,7 @@ get_filename_component(TOOLS_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 # ------------------------------------------------------------------------------------ #
 # Provide *recommended* compiler flags used by this build of Tools. Don't mess with the
 # actual CMAKE_CXX_FLAGS!!! It's up to the user what to do with these.
-set(TOOLS_CXX_FLAGS " -std=c++17")
+set(TOOLS_CXX_FLAGS "-std=c++17")
 
 # ------------------------------------------------------------------------------------ #
 # Configure the path to the headers
