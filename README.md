@@ -104,17 +104,17 @@ for instance.
 ### Tooling installation
 - `pre-commit`, as a Python tool, can be installed with:
 
-  - `pipx`
+      + `pipx`
 
-          pipx install pre-commit
+            pipx install pre-commit
 
-  - `pip` (or `pip3` on Debian-like distribution)
+    + `pip` (or `pip3` on Debian-like distribution)
 
-          pip install -U pre-commit
+            pip install -U pre-commit
 
-  - `snap` (system-wide)
+    + `snap` (system-wide)
 
-          sudo snap install pre-commit
+            sudo snap install pre-commit
 
   and perhaps from your distribution package manager.
 
