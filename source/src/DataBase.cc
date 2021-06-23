@@ -11,12 +11,11 @@
 
 #include "DataBase.hh"
 
-#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <memory>
-#include <regex>
 #include <string>
+#include <vector>
 
 #include "Regex.hh"
 #include "String.hh"
@@ -27,8 +26,18 @@
 #    include "TObjString.h"
 #endif
 
-using namespace tools;
-using namespace std;
+namespace tools
+{
+using std::cerr;
+using std::cout;
+using std::endl;
+using std::ifstream;
+using std::istream;
+using std::ofstream;
+using std::ostream;
+using std::shared_ptr;
+using std::string;
+using std::vector;
 
 ////////////////////////////////////////////////////////////////
 ////////////////////////// DataBase ///////////////////////////
@@ -507,4 +516,7 @@ void DataBase::WriteRoot(const char* filename) const {
     WriteRoot(&file);
     file.Close();
 }
+
 #endif  // DATABASE__USE_ROOT
+
+}  // namespace tools

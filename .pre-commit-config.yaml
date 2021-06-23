@@ -12,11 +12,13 @@ repos:
         entry: black
         language: system
         types: [python]
+
       - id: flake8
         name: Flake8
         entry: flake8
         language: system
         types: [python]
+
       - id: pyupgrade
         name: PyUpgrade
         entry: pyupgrade
@@ -54,6 +56,13 @@ repos:
         always_run: true
         entry: make -j all
         files: Makefile
+
+  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+    rev: 0.1.0
+    hooks:
+      - id: yamlfmt
+        args: [--mapping, '2', --sequence, '4', --offset, '2', --width, '150']
+        types: [yaml]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
@@ -101,13 +110,6 @@ repos:
       - id: debug-statements
         types: [python]
       - id: requirements-txt-fixer
-
-  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
-    rev: 0.1.0
-    hooks:
-      - id: yamlfmt
-        args: [--mapping, '2', --sequence, '4', --offset, '2', --width, '150']
-        types: [yaml]
 
   #- repo: https://github.com/python/black
     #rev: 21.5b1

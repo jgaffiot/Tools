@@ -12,14 +12,15 @@
 #include <time.h>
 #include <unistd.h>
 
-#include <chrono>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
 
-using namespace tools;
-using namespace std;
+namespace tools
+{
+using std::cout;
+using std::snprintf;
 
 void display_bar_cxx98_notime(
     char* disp, size_t n, const uint64_t whereami, const uint64_t tot, const bool kbs) {
@@ -28,7 +29,7 @@ void display_bar_cxx98_notime(
     char* p = disp;
     struct timeval tv;
     static double previous_time = 0., previous = 0.;
-    std::snprintf(disp, n, "processed: %2d%%  ", progress);
+    snprintf(disp, n, "processed: %2d%%  ", progress);
     move_to_end(p, disp);
     *p++ = '[';
     for (int k = 0; k < 20; k++) {
@@ -48,14 +49,14 @@ void display_bar_cxx98_notime(
         (static_cast<double>(whereami) - previous * static_cast<double>(tot))
         / static_cast<double>(tv.tv_sec + 1.0e-6 * tv.tv_usec - previous_time) / 1024.;
     if (kbs) {
-        std::snprintf(buffer, detail_bar::kSmallSize, "  %.1f kB/s ", speed);
+        snprintf(buffer, detail_bar::kSmallSize, "  %.1f kB/s ", speed);
     } else {
-        std::snprintf(buffer, detail_bar::kSmallSize, "  %.1f evts/s ", speed * 1024.);
+        snprintf(buffer, detail_bar::kSmallSize, "  %.1f evts/s ", speed * 1024.);
     }
     strncat(disp, buffer, detail_bar::kSmallSize);
-    std::cout << "\r";
-    std::cout << disp;
-    std::cout.flush();
+    cout << "\r";
+    cout << disp;
+    cout.flush();
     previous = static_cast<double>(whereami) / static_cast<double>(tot);
     previous_time = static_cast<double>(tv.tv_sec + 1.0e-6 * tv.tv_usec);
 }
@@ -74,7 +75,7 @@ void display_bar_cxx98(
     char* p = disp;
     struct timeval tv;
     static double previous_time = 0., previous = 0.;
-    std::snprintf(disp, n, "processed: %2d%%  ", progress);
+    snprintf(disp, n, "processed: %2d%%  ", progress);
     move_to_end(p, disp);
     *p++ = '[';
     for (int k = 0; k < 20; k++) {
@@ -97,10 +98,10 @@ void display_bar_cxx98(
                      / static_cast<double>(tv.tv_sec + 1.0e-6 * tv.tv_usec - init_time)
                      / 1024.;
     if (kbs) {
-        std::snprintf(
+        snprintf(
             buffer, detail_bar::kSmallSize, "  %.1f kB/s -> %.1f kB/s", speed, average);
     } else {
-        std::snprintf(
+        snprintf(
             buffer,
             detail_bar::kSmallSize,
             "  %.1f evts/s -> %.1f evts/s",
@@ -108,9 +109,9 @@ void display_bar_cxx98(
             average * 1024.);
     }
     strncat(disp, buffer, detail_bar::kSmallSize);
-    std::cout << "\r";
-    std::cout << disp;
-    std::cout.flush();
+    cout << "\r";
+    cout << disp;
+    cout.flush();
     previous = static_cast<double>(whereami) / static_cast<double>(tot);
     previous_time = static_cast<double>(tv.tv_sec + 1.0e-6 * tv.tv_usec);
 }
@@ -119,10 +120,10 @@ void display_bar_cxx98(
 
 void display_end_bar(char* disp, size_t n) {
     snprintf(disp, n, "processed: 100%% [====================]");
-    std::cout << "\r";
-    std::cout << disp;
-    std::cout.flush();
-    std::cout << "\n";
+    cout << "\r";
+    cout << disp;
+    cout.flush();
+    cout << "\n";
 }
 
 ////////////////////////////////////////////////////////////////
@@ -130,14 +131,14 @@ void display_end_bar(char* disp, size_t n) {
 ////////////////////////////////////////////////////////////////
 
 ProgressBar::ProgressBar(double _NbIteration): NbIteration(_NbIteration) {
-    init = PBC::now();
+    init = Clock::now();
     previous = init;
 }
 
 ////////////////////////////////////////////////////////////////
 
 void ProgressBar::Display(double current_iter) {
-    now = PBC::now();
+    now = Clock::now();
     if (now - previous < delta_t) {
         return;
     }
@@ -185,3 +186,5 @@ void ProgressBar::Display(double current_iter) {
 void ProgressBar::DisplayEnd() {
     cout << "\rprocessed: 100%% [====================]\n";
 }
+
+}  // namespace tools

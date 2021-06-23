@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tools"
-version = "1.0.0"
+version = "1.2.0"
 description = "Yet another small C++ generic library, extending the standard library for ease of use."
 authors = ["jgaffiot <j.gaffiot@laposte.net>"]
 

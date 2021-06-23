@@ -55,19 +55,19 @@ public:
     void DisplayEnd();
 
 private:
-    typedef std::chrono::high_resolution_clock PBC;  // Progress Bar Clock
-    typedef PBC::time_point PBTP;  // Progress Bar Time Point
+    typedef std::chrono::high_resolution_clock Clock;
 
     double NbIteration;
     double previous_iter = 0.;
     char small_buffer[detail_bar::kSmallSize];
     char large_buffer[detail_bar::kLargeSize];
-    PBTP init, now, previous;
+    Clock::time_point init, now, previous;
 
-    constexpr static double ClockPeriod =
-        static_cast<double>(PBC::period::den) / static_cast<double>(PBC::period::num);
-    constexpr static std::chrono::duration<PBC::rep, std::chrono::milliseconds::period>
-        delta_t{500};
+    constexpr static double ClockPeriod = static_cast<double>(Clock::period::den)
+                                          / static_cast<double>(Clock::period::num);
+    constexpr static std::chrono::
+        duration<Clock::rep, std::chrono::milliseconds::period>
+            delta_t{500};
 };
 
 }  // namespace tools

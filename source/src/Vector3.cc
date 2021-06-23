@@ -12,9 +12,8 @@
 
 #include "Math.hh"
 
-using namespace tools;
-using namespace std;
-
+namespace tools
+{
 void Vector3::SetMagThetaPhi(double mag, double theta, double phi) {
     double amag = abs(mag);
     v[2] = amag * cos(theta);
@@ -70,3 +69,5 @@ Vector3& Vector3::Unit() {
     v[2] /= norm;
     return *this;
 }
+
+}  // namespace tools
