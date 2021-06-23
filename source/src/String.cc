@@ -8,8 +8,8 @@
 
 #include "String.hh"
 
-using namespace tools;
-
+namespace tools
+{
 hash_t HashRunTime(const char* str) {
     hash_t ret{detail_string::basis};
     while (*str) {
@@ -19,3 +19,5 @@ hash_t HashRunTime(const char* str) {
     }
     return ret;
 }
+
+}  // namespace tools

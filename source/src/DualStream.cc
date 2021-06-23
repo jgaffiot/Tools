@@ -13,8 +13,12 @@
 
 #include "String.hh"
 
-using namespace tools;
-using namespace std;
+namespace tools
+{
+using std::cerr;
+using std::invalid_argument;
+using std::ios;
+using std::string;
 
 DualStream::DualStream(const char* output_file_name, std::ostream& os): screen_out(os) {
     if (not Open(output_file_name)) {
@@ -44,11 +48,14 @@ bool DualStream::Open(const char* output_file_name) {
 }
 
 #ifdef DUAL_TEST
+#    include <fstream>
 int main() {
-    ofstream ofs("dual.txt");
+    std::ofstream ofs("dual.txt");
     DualStreamBuf bout(ofs.rdbuf());
     DualStreamBuf berr(ofs.rdbuf(), std::cerr);
     bout << "pwatout\n";
     berr << "pwaterr\n";
 }
 #endif
+
+}  // namespace tools
