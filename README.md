@@ -113,7 +113,7 @@ for instance.
 
 - `pre-commit`, as a Python tool, can be installed with:
 
-    - `pipx`
+    - `pipx` (preferred)
 
             pipx install pre-commit
 
