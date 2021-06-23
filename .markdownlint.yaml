@@ -1,0 +1,14 @@
+---
+default: true
+# MD007/ul-indent - Unordered list indentation
+MD007:
+  # Spaces for indent
+  indent: 4
+# MD013/line-length - Line length
+MD013:
+  # Number of characters
+  line_length: 88
+  # Number of characters for headings
+  heading_line_length: 88
+  # Number of characters for code blocks
+  code_block_line_length: 88

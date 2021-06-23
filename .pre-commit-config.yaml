@@ -57,6 +57,14 @@ repos:
         entry: make -j all
         files: Makefile
 
+# Markdown
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.27.1
+    hooks:
+      - id: markdownlint
+        types: [markdown]
+
+# YAML
   - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
     rev: 0.1.0
     hooks:
@@ -64,6 +72,7 @@ repos:
         args: [--mapping, '2', --sequence, '4', --offset, '2', --width, '150']
         types: [yaml]
 
+# All files + miscellanous
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
     hooks:
