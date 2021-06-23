@@ -1,11 +1,13 @@
+# Tools
+
 <!-- [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) -->
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
-# Tools
 Yet another small C++ generic library, extending the standard library for ease
 of use.
 
 ## Content
+
 - DataBase: a singleton used to parse specifically formatted files and present
   the content as key/values.
   Written before I heard of YAML... so considered as deprecated.
@@ -29,7 +31,9 @@ of use.
 - Vector3: yet another implementation of the 3-dimensional mathematical vector.
 
 ## Build
+
 ### Layout
+
 The library is built with `cmake` and has been tested with `g++` and `clang`.
 
 The build layout is included in the repository, with the `source`, `build` and
@@ -45,6 +49,7 @@ at the compilation if the optional prerequisites are installed and the Python
 virtual environment activated (with `poetry shell`).
 
 ### Prerequisites
+
 Required:
 
 - `make`
@@ -61,6 +66,7 @@ Optional:
 then run `poetry install` to install the optional Python packages
 
 ### Option
+
 A Makefile is provided at the root to run `cmake` then `make` in a single step,
 with the following options:
 
@@ -77,7 +83,9 @@ with the following options:
 - `clean_lib_bin`: remove the `install` directory
 
 ## Contribute
+
 ### Tooling set
+
 A set of formatters and static analysis tools is used to guarantee the homogeneity
 of the code and catch mistakes:
 
@@ -102,17 +110,18 @@ An other solution is to use `poetry run git commit ...` (for configuration of an
 for instance.
 
 ### Tooling installation
+
 - `pre-commit`, as a Python tool, can be installed with:
 
-      + `pipx`
+    - `pipx`
 
             pipx install pre-commit
 
-    + `pip` (or `pip3` on Debian-like distribution)
+    - `pip` (or `pip3` on Debian-like distribution)
 
             pip install -U pre-commit
 
-    + `snap` (system-wide)
+    - `snap` (system-wide)
 
             sudo snap install pre-commit
 
@@ -125,12 +134,16 @@ for instance.
   [documentation](https://python-poetry.org/docs/#installation), it is best
   installed with its own installer:
 
-        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+        curl -sSL \
+        https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
+        | python -
 
   or on Debian-like distribution (using `python3` instead of `python` which is
   `python2`):
 
-        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
+        curl -sSL \
+        https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
+        | python3 -
 
   Once `poetry` is installed, run `poetry install --dev` to install all the project
   packages and the development tooling.
@@ -158,7 +171,8 @@ for instance.
   On Debian-like distribution, use:
 
       sudo apt install clang-format-11
-      sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-11 50
+      sudo update-alternatives --install /usr/bin/clang-format clang-format \
+        /usr/bin/clang-format-11 50
 
 - `cpplint`, a Python tool, is either installed through `poetry`, either installed
   at a higher level with `pip`, `pipx` or a package manager.
@@ -169,7 +183,9 @@ All together, on Ubuntu 20.04 or higher, run:
         libclang-11-dev python3 python3-pip
     sudo apt remove --purge python3-virtualenv virtualenv
     pip3 install virtualenv pre-commit
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
+    curl -sSL \
+        https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
+        | python3 -
     # cd path/to/repository/
     poetry install --dev
     poetry shell
