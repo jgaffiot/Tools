@@ -46,7 +46,7 @@ repos:
         description: Run `cppcheck` against C/C++ source files
         language: system
         files: \.(c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
-        entry: cppcheck --error-exitcode=1
+        entry: cppcheck --error-exitcode=1 --project=compile_commands.json
         args: [--enable=warning]
 
       - id: compilation
