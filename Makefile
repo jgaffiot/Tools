@@ -117,5 +117,5 @@ help:
 Makefile:;
 .PHONY: %
 %: $(RELEASE_DIR)/Makefile
-	echo "Passing target '$'to generated Makefile in $(RELEASE_DIR)"
+	echo "Passing target '$@' to generated Makefile in $(RELEASE_DIR)"
 	( $(MAKE) -C $(RELEASE_DIR) $ ) || exit $$?;
