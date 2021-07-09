@@ -28,7 +28,7 @@ debug: install_debug
 
 
 .PHONY: generate
-generate: | install_dependencies
+generate:
 	echo "Creating directory $(RELEASE_DIR) and running cmake in Release mode"
 	mkdir -p $(RELEASE_DIR);
 	( cd $(RELEASE_DIR)$ ;  $(CMAKE) -DCMAKE_BUILD_TYPE=Release $(FLAG) ) || exit $$?;
@@ -46,7 +46,7 @@ install: build
 	( $(MAKE) -C $(RELEASE_DIR) install ) || exit $$?;
 
 .PHONY: generate_debug
-generate_debug: | install_dependencies
+generate_debug:
 	echo "Creating directory $(DEBUG_DIR) and running cmake in Debug mode"
 	mkdir -p $(DEBUG_DIR);
 	( cd $(DEBUG_DIR)$ ;  $(CMAKE) -DCMAKE_BUILD_TYPE=Debug $(FLAG)) || exit $$?;
@@ -65,7 +65,7 @@ install_debug: build_debug
 
 
 .PHONY: clean
-clean: clean_dependencies clean_install
+clean: clean_install
 	if [ -d  $(RELEASE_DIR) ]; \
 	then \
 		echo "Cleaning compiled files"; \
@@ -77,7 +77,7 @@ clean: clean_dependencies clean_install
 	fi;
 
 .PHONY: clean_debug
-clean_debug: clean_dependencies clean_install
+clean_debug: clean_install
 	if [ -d  $(DEBUG_DIR) ]; \
 	then \
 		echo "Cleaning compiled files"; \
@@ -93,17 +93,11 @@ clean_install:
 	echo "Cleaning installed binaries and libraries"
 	rm -rf $(INSTALL_DIR)/
 
-.PHONY: clean_dependencies
-clean_dependencies:
-	echo "Cleaning Conan's dependency installation files"
-	rm -rf $(CONAN_DIR)
-
 .PHONY : help
 help:
 	echo "The following are some of the valid targets for this Makefile:"
 	echo ".. all (the default if no target is provided)"
 	echo ".. debug"
-	echo ".. install_dependencies"
 	echo ".. generate"
 	echo ".. build"
 	echo ".. install"
@@ -113,7 +107,6 @@ help:
 	echo ".. clean"
 	echo ".. clean_debug"
 	echo ".. clean_install"
-	echo ".. clean_dependencies"
 	if [ -d  $(RELEASE_DIR) ]; \
 	then \
 		echo; echo "Targets of the CMake generated Makefile"; \
