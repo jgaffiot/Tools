@@ -30,7 +30,7 @@ public:
 
     template<typename... Args>
     Error(const std::string& arg, Args... args): std::exception() {
-        message = scat(arg, args...);
+        message = cat(arg, args...);
     }
 
     inline virtual const std::string& swhat() const noexcept { return message; }

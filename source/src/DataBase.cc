@@ -58,7 +58,7 @@ string DataBase::GetPath(const char* env_path) const {
             " ***Error DataBase::GetPath()2: env_path is not defined: ", env_path);
     }
 
-    return scat(env, "/");
+    return cat(env, "/");
 }
 
 ////////////////////////////////////////////////////////////////
@@ -86,7 +86,7 @@ void DataBase::ReadFile(istream& is, string prefix, DataBase::EOverwrite overwri
     Regex regNum(number);
     Regex regTable("^=");
     Regex regComment("\\s*#.*$");
-    Regex regParse(scat("^(\\w+)(\\s+", number, ")?(\\s+(.+))?"));  // to parse the line
+    Regex regParse(cat("^(\\w+)(\\s+", number, ")?(\\s+(.+))?"));  // to parse the line
     while (getline(is, str).good()) {  // get a line from the file
         if (is.fail()) {
             break;
@@ -463,10 +463,10 @@ void DataBase::WriteRoot(TFile* file) const {
         const string& key(KeyList[i]);
         SaveStr += key;
         if (HasNumValue(key)) {
-            SaveStr += scat(" ", NumMap.at(key));
+            SaveStr += cat(" ", NumMap.at(key));
         }
         if (HasStrValue(key)) {
-            SaveStr += scat(" : ", StringMap.at(key));
+            SaveStr += cat(" : ", StringMap.at(key));
         }
         SaveStr += "\n";
     }
@@ -477,19 +477,19 @@ void DataBase::WriteRoot(TFile* file) const {
     for (auto itMap = TableMap.begin(), endMap = TableMap.end(); itMap != endMap;
          ++itMap) {
         SaveStr.clear();
-        SaveStr = scat("\n\n", (*itMap).first, "\n");
+        SaveStr = cat("\n\n", (*itMap).first, "\n");
 
         auto tab = (*itMap).second;
         const vector<string>* ColNames = &tab->GetColumnNames();
         for (auto itV = ColNames->begin(), end = ColNames->end(); itV != end; ++itV) {
-            SaveStr += scat("\t", *itV);
+            SaveStr += cat("\t", *itV);
         }
         SaveStr += "\n";
 
         for (int iRow = 0; iRow < tab->GetNbRows(); iRow++) {
             for (auto itV = ColNames->begin(), end = ColNames->end(); itV != end; ++itV)
             {
-                SaveStr += scat("\t", (*tab)[*itV].at(iRow));
+                SaveStr += cat("\t", (*tab)[*itV].at(iRow));
             }
             SaveStr += "\n";
         }
