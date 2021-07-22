@@ -17,7 +17,7 @@ namespace tools
 template<typename T>
 constexpr std::string_view type_name();
 
-template<typename T = void>
+template<>
 constexpr std::string_view type_name<void>() {
     return "void";
 }
