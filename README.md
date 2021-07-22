@@ -28,6 +28,7 @@ Yet another small C++ generic library, but with an automatic Python binding!
   number of arguments of any types into a string, and a compile time hash
   function to allow to switch on strings.
 - Vector3: yet another implementation of the 3-dimensional mathematical vector.
+- Display: set of function and operator to help printing, logging...
 
 ## Build
 
