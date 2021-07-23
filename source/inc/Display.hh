@@ -1,6 +1,8 @@
 // --------------------------------------------------------------------------//
 /**
  * AUTHOR: J. Gaffiot
+ * FROM: Howard Hinnant, 康桓瑋, Val, einpoklum
+ * See https://stackoverflow.com/questions/81870/is-it-possible-to-print-a-variables-type-in-standard-c
  * DATE: 2021-07-22
  * CONTACT: j.gaffiot@laposte.net
  */
