@@ -12,6 +12,7 @@
 #include <cstring>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -128,22 +129,30 @@ inline std::vector<std::string> split(
     return tokens;
 }
 
-// stuff for emulation of switch with strings
-typedef std::uint64_t hash_t;
+// String constexpr hash function to allow the use of "switch" with strings
+//! Return type of the string hash function
+using hash_t = std::uint64_t;
+
 namespace detail_string
 {
 constexpr static hash_t prime = 0x100000001B3ull;
 constexpr static hash_t basis = 0xCBF29CE484222325ull;
 }  // namespace detail_string
-constexpr hash_t HashCompileTime(
-    const char* const str, hash_t last_value = detail_string::basis) {
-    return *str ? HashCompileTime(str + 1, (*str ^ last_value) * detail_string::prime)
-                : last_value;
+
+//! C-string constexpr hash function
+constexpr hash_t strhash(
+    const char* const str, hash_t last_val = detail_string::basis) {
+    return *str ? strhash(str + 1, (*str ^ last_val) * detail_string::prime) : last_val;
 }
+//! std::string constexpr hash function, same as the C-string version above
+constexpr hash_t strhash(const std::string_view& str)
+{
+    return strhash(str.data());
+}
+//! operator _hash intended for constexpr hash of C-string
 constexpr hash_t operator"" _hash(const char* const p, size_t) {
-    return HashCompileTime(p);
+    return strhash(p);
 }
-hash_t HashRunTime(char const* str);
 
 }  // namespace tools
 
