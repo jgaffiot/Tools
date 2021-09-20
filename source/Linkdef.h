@@ -23,7 +23,7 @@
 #    pragma link C++ class tools::Regex;
 #    pragma link C++ class tools::Vector3 + ;
 #    pragma link C++ typedef tools::hash_t;
-#    pragma link C++ function tools::HashRunTime;
+#    pragma link C++ function tools::StringHash;
 #    pragma link C++ function tools::cat < char>;
 #    pragma link C++ function tools::scat < char>;
 #    pragma link C++ function tools::Math::Pi;
