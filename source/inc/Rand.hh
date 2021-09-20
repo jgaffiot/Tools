@@ -6,8 +6,8 @@
  */
 // --------------------------------------------------------------------------//
 
-#ifndef RAND_HH
-#define RAND_HH 2
+#ifndef TOOLS_RAND_HH
+#define TOOLS_RAND_HH 2
 
 #include <chrono>
 #include <cmath>
@@ -475,4 +475,4 @@ inline const vector Random<vector>::Cuboid(
 
 }  // namespace tools
 
-#endif  // RAND_HH
+#endif  // TOOLS_RAND_HH

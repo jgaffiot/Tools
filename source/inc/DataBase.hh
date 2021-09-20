@@ -8,8 +8,8 @@
 /** Inspired by DCParam, the API for the Double Chooz simple "database"
     of numeric and string values, written by Glenn Horton-Smith.
 */
-#ifndef DATABASE_HH
-#define DATABASE_HH 1
+#ifndef TOOLS_DATABASE_HH
+#define TOOLS_DATABASE_HH 1
 
 #ifdef USE_ROOT
 #    define DATABASE__USE_ROOT 1
@@ -21,7 +21,7 @@
 #include <string>
 #include <vector>
 
-#include "Exception.hh"
+#include "BaseError.hh"
 #include "ToolsConfig.hh"
 
 #ifdef DATABASE__USE_ROOT
@@ -36,16 +36,16 @@ class DataTable;
 ////////////////////////// exception ///////////////////////////
 ////////////////////////////////////////////////////////////////
 
-class DataBaseError: public Error {
+class DataBaseError: public BaseError {
 public:
-    explicit DataBaseError(const std::string& arg): Error(arg) {}
+    explicit DataBaseError(const std::string& arg): BaseError(arg) {}
     explicit DataBaseError(const std::string& arg, std::ofstream& write):
-        Error(arg, write) {}
+        BaseError(arg, write) {}
 
     template<typename T>
-    explicit DataBaseError(const T& val): Error(val) {}
+    explicit DataBaseError(const T& val): BaseError(val) {}
     template<typename T, typename... Args>
-    DataBaseError(const T& val, Args... args): Error(val, args...) {}
+    DataBaseError(const T& val, Args... args): BaseError(val, args...) {}
 };
 
 ////////////////////////////////////////////////////////////////
@@ -339,4 +339,4 @@ private:
 
 }  // namespace tools
 
-#endif /* DATABASE_HH */
+#endif /* TOOLS_DATABASE_HH */

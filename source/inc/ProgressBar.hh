@@ -6,8 +6,8 @@
  */
 // --------------------------------------------------------------------------//
 
-#ifndef PROGRESS_BAR_HH
-#define PROGRESS_BAR_HH
+#ifndef TOOLS_PROGRESS_BAR_HH
+#define TOOLS_PROGRESS_BAR_HH
 
 #include <chrono>
 #include <ratio>
@@ -72,4 +72,4 @@ private:
 
 }  // namespace tools
 
-#endif  // end PROGRESS_BAR_HH
+#endif  // end TOOLS_PROGRESS_BAR_HH

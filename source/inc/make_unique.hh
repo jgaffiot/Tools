@@ -6,8 +6,8 @@
  */
 // --------------------------------------------------------------------------//
 
-#ifndef MAKE_UNIQUE_HH
-#define MAKE_UNIQUE_HH 1
+#ifndef TOOLS_MAKE_UNIQUE_HH
+#define TOOLS_MAKE_UNIQUE_HH 1
 
 #include <memory>
 #include <utility>
@@ -32,4 +32,4 @@ std::unique_ptr<T, D> make_unique(Args&&... args) {
 
 #endif  // __cplusplus == 201103L
 
-#endif  // MAKE_UNIQUE_HH
+#endif  // TOOLS_MAKE_UNIQUE_HH

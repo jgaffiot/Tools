@@ -6,8 +6,8 @@
  */
 // --------------------------------------------------------------------------//
 
-#ifndef MATH_HH
-#define MATH_HH 1
+#ifndef TOOLS_MATH_HH
+#define TOOLS_MATH_HH 1
 
 #include <cmath>
 
@@ -124,4 +124,4 @@ inline double diff2(T a, U b) {
 
 }  // end namespace tools
 
-#endif  // MATH_HH
+#endif  // TOOLS_MATH_HH
