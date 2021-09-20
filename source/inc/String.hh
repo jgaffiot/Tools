@@ -31,9 +31,7 @@ struct is_streamable<
 
 template<
     typename T,
-    typename = typename std::enable_if<
-        is_streamable<std::ostringstream, T>{}>::type
->
+    typename = typename std::enable_if<is_streamable<std::ostringstream, T>{}>::type>
 inline void PushToStream(std::ostringstream& oss, T&& val) {
     oss << std::forward<T>(val);
 }
@@ -41,9 +39,7 @@ inline void PushToStream(std::ostringstream& oss, T&& val) {
 template<
     typename T,
     typename... Args,
-    typename = typename std::enable_if<
-        is_streamable<std::ostringstream, T>{}>::type
->
+    typename = typename std::enable_if<is_streamable<std::ostringstream, T>{}>::type>
 inline void PushToStream(std::ostringstream& oss, T&& val, Args&&... args) {
     oss << std::forward<T>(val);
     PushToStream(oss, std::forward<Args>(args)...);
