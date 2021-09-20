@@ -18,7 +18,7 @@
 #include <vector>
 
 #include "Regex.hh"
-#include "String.hh"
+#include "StringUtils.hh"
 
 #ifdef DATABASE__USE_ROOT
 #    include "TDirectory.h"

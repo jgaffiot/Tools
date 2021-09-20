@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "String.hh"
+#include "StringUtils.hh"
 
 namespace tools
 {

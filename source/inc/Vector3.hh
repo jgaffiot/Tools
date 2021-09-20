@@ -6,16 +6,28 @@
  */
 // --------------------------------------------------------------------------//
 
-#ifndef VECTOR3_HH
-#define VECTOR3_HH 1
+#ifndef TOOLS_VECTOR3_HH
+#define TOOLS_VECTOR3_HH 1
 
 #include <array>
 
-#include "Exception.hh"
+#include "BaseError.hh"
 #include "Math.hh"
 
 namespace tools
 {
+class Vector3Error: public BaseError {
+public:
+    explicit Vector3Error(const std::string& arg): BaseError(arg) {}
+    explicit Vector3Error(const std::string& arg, std::ofstream& write):
+        BaseError(arg, write) {}
+
+    template<typename T>
+    explicit Vector3Error(const T& val): BaseError(val) {}
+    template<typename T, typename... Args>
+    Vector3Error(const T& val, Args... args): BaseError(val, args...) {}
+};
+
 class Vector3 {
 public:
     Vector3() {}
@@ -29,7 +41,7 @@ public:
         if (i < 3) {
             return v[i];
         }
-        throw Error("Vector3::operator(): index too high: ", i, " > 2");
+        throw Vector3Error("Vector3::operator(): index too high: ", i, " > 2");
     }
     inline double at(std::size_t i) const { return v.at(i); }
     inline double x() const { return v[0]; }
@@ -83,4 +95,4 @@ inline Vector3 operator/(const Vector3& v, double d) {
 
 }  // namespace tools
 
-#endif  // VECTOR3_HH
+#endif  // TOOLS_VECTOR3_HH

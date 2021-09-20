@@ -8,8 +8,8 @@
  */
 // --------------------------------------------------------------------------//
 
-#ifndef DISPLAY_HH
-#define DISPLAY_HH 1
+#ifndef TOOLS_DISPLAY_HH
+#define TOOLS_DISPLAY_HH 1
 
 #include <iostream>
 #include <string_view>
@@ -73,4 +73,4 @@ inline std::ostream& operator<<(
 
 }  // namespace tools
 
-#endif  // DISPLAY_HH
+#endif  // TOOLS_DISPLAY_HH

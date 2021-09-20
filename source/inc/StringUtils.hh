@@ -6,8 +6,8 @@
  */
 // --------------------------------------------------------------------------//
 
-#ifndef STRING_HH
-#define STRING_HH 1
+#ifndef TOOLS_STRING_UTILS_HH
+#define TOOLS_STRING_UTILS_HH 1
 
 #include <cstring>
 #include <sstream>
@@ -61,7 +61,7 @@ inline std::string JoinImpl(const C& container, const D& delimiter) {
 }
 }  // end namespace detail_string
 
-// Concatenation of any streamable objects into a string
+//! Concatenation of any streamable objects into a string, returns a C-string
 template<typename... Args>
 inline const char* ccat(Args&&... args) {
     std::ostringstream oss;
@@ -72,6 +72,7 @@ inline const char* ccat(Args&&... args) {
     return new_str;
 }
 
+//! Concatenation of any streamable objects into a string, returns a std::string
 template<typename... Args>
 inline std::string cat(Args&&... args) {
     std::ostringstream oss;
@@ -79,7 +80,7 @@ inline std::string cat(Args&&... args) {
     return oss.str();
 }
 
-// Simple join of containers into a string, with a char or string delimiter
+//! Simple join of containers into a string, with a char delimiter
 template<
     typename C,
     typename T = typename C::value_type,
@@ -89,6 +90,7 @@ inline std::string join(C const& container, char delimiter = ',') {
     return detail_string::JoinImpl(container, delimiter);
 }
 
+//! Simple join of containers into a string, with a string delimiter
 template<
     typename C,
     typename T = typename C::value_type,
@@ -98,7 +100,7 @@ inline std::string join(C const& container, const std::string& delimiter = ", ")
     return detail_string::JoinImpl(container, delimiter);
 }
 
-// Simple splitting of a string, over a char or a string
+//! Simple splitting of a string, over a char
 inline std::vector<std::string> split(const std::string& s, char delimiter) {
     std::vector<std::string> tokens;
     std::string token;
@@ -109,6 +111,7 @@ inline std::vector<std::string> split(const std::string& s, char delimiter) {
     return tokens;
 }
 
+//! Simple splitting of a string, over a string
 inline std::vector<std::string> split(
     const std::string& s, const std::string& delimiter) {
     std::vector<std::string> tokens;
@@ -152,4 +155,4 @@ constexpr hash_t operator"" _hash(const char* const p, size_t) {
 
 }  // namespace tools
 
-#endif  // STRING_HH
+#endif  // TOOLS_STRING_UTILS_HH

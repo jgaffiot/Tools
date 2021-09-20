@@ -225,10 +225,9 @@ endif()
 execute_process(
     COMMAND cling-config --cmake
     OUTPUT_VARIABLE CPPYY_MODULE_PATH
-    ERROR_VARIABLE CPPYY_MODULE_ERROR
     OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_STRIP_TRAILING_WHITESPACE
 )
-if (NOT CPPYY_MODULE_ERROR EQUAL 0)
+if (NOT EXISTS "${CPPYY_MODULE_PATH}")
     message(STATUS "Cppyy has not been installed, skipping the Python binding")
     return()
 endif()

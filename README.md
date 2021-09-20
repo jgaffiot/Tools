@@ -7,28 +7,31 @@ Yet another small C++ generic library, but with an automatic Python binding!
 
 ## Content
 
-- DataBase: a singleton used to parse specifically formatted files and present
+- `BaseError`: provides a `BaseError` class derived of `std::exception` but
+  accepting any number of arguments to format all of them into a string.
+  See `StringUtils` below.
+- `DataBase`: a singleton used to parse specifically formatted files and present
   the content as key/values.
   Written before I heard of YAML... so considered as deprecated.
-- DualStream: a simplistic class to print to screen and to a log file at the
+- `Display`: set of function and operator to help printing, logging...
+- `DualStream`: a simplistic class to print to screen and to a log file at the
   same time. Used as `cout/cerr`.
-- Exception: provides an `except` class derived of `std::exception` but
-  accepting any number of arguments to format all of them into a string.
-  See String below.
-- Some useful constants (Pi and derivatives mainly) and templatized functions:
+- `make_unique`: provides the function `make_unique` for C++11
+- `Math`: some useful constants (Pi and derivatives mainly) and templatized functions:
   square, cube, power with an integer exponent, sum of square of any number of
   numbers, square root of the sum of squares, and difference of the square of
   2 numbers.
-- ProgressBar: a progress bar with instant and average speed.
-- Rand: a class providing an integrated interfaces to all standard random
+- `ProgressBar`: a progress bar with instant and average speed.
+- `Rand`: a class providing an integrated interfaces to all standard random
   distributions, and allowing to shoot 3-dimensional vectors.
-- Regex: a class providing an integrated interfaces to regular expressions,
-  built on top of the standard regex library.
-- String: two functions `cat` and `scat` allowing to concatenate an arbitrary
-  number of arguments of any types into a string, and a compile time hash
-  function to allow to switch on strings.
-- Vector3: yet another implementation of the 3-dimensional mathematical vector.
-- Display: set of function and operator to help printing, logging...
+- `Regex`: a class providing an integrated interfaces to regular expressions,
+  built on top of the standard regex library. Do not use for big data parsing, since
+    the standard regex implementation is known to be significantly slower than several
+    widely used free implementations (such as boost).
+- `StringUtils`: string manipulation functions: concatenation of an arbitrary number of
+  arguments of any types into a string, split, join and a compile time hash function to
+  allow to switch on strings.
+- `Vector3`: yet another implementation of the 3-dimensional mathematical vector.
 
 ## Build
 
@@ -81,6 +84,17 @@ with the following options:
 - `clean`: `clean_lib_bin` + remove the `release` directory
 - `clean_debug`: `clean_lib_bin` + remove the `debug` directory
 - `clean_lib_bin`: remove the `install` directory
+
+## Test
+
+Once the librairy has been built, including the Python binding, run `pytest`:
+
+    # Building
+    poetry shell
+    make -j
+
+    # Actual tests
+    pytest
 
 ## Contribute
 

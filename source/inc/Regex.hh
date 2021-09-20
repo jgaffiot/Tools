@@ -6,8 +6,8 @@
  */
 // --------------------------------------------------------------------------//
 
-#ifndef REGEX_HH
-#define REGEX_HH 1
+#ifndef TOOLS_REGEX_HH
+#define TOOLS_REGEX_HH 1
 
 #include <cstring>
 #include <iosfwd>

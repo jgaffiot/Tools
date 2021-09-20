@@ -6,8 +6,8 @@
  */
 // --------------------------------------------------------------------------//
 
-#ifndef DUALSTREAM_HH
-#define DUALSTREAM_HH 1
+#ifndef TOOLS_DUALSTREAM_HH
+#define TOOLS_DUALSTREAM_HH 1
 
 #include <fstream>
 #include <iostream>

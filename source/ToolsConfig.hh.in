@@ -9,4 +9,10 @@
 // The flag to use ROOT or not
 #cmakedefine USE_ROOT
 
+// The static path of the Tools librairy
+namespace tools
+{
+constexpr char kStaticPath[]{"@REPOSITORY_DIR@"};
+}  // namespace tools
+
 #endif  // TOOLSCONFIG_HH
