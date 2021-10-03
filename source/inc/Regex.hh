@@ -19,13 +19,14 @@ namespace tools
 {
 class Regex {
 public:
-    explicit Regex(const char* pattern) { theRegex.assign(pattern); }
-    explicit Regex(const std::string pattern) { theRegex.assign(pattern); }
+    explicit Regex(const std::string& pattern): thePattern(pattern) {
+        theRegex.assign(pattern);
+    }
 
-    inline int Match(const char* const str);
-    inline const std::vector<std::string>& Split(const char* const str);
-    inline void Substitute(const char* str, const char* const replace) {
-        str = std::regex_replace(str, theRegex, replace).data();
+    inline int Match(const std::string& str);
+    inline const std::vector<std::string>& Split(const std::string& str);
+    inline void Substitute(std::string& str, const std::string& replace) {
+        str = std::regex_replace(str, theRegex, replace);
     }
 
     inline void Assign(const char* const pattern) {
@@ -34,7 +35,7 @@ public:
     }
     inline void Clear() {
         theTokens.clear();
-        theResult = std::cmatch();
+        theResult = std::smatch();
     }
     inline void Reset() {
         Clear();
@@ -81,41 +82,30 @@ public:
     inline void PrintTokens(std::ostream& out) const;
 
 private:
+    std::string thePattern;
     std::regex theRegex;
-    std::cmatch theResult;
+    std::smatch theResult;
     std::vector<std::string> theTokens;
 
 public:  // methods with strings
-    inline const std::vector<std::string>& Split(const std::string& str);
-    inline int Match(const std::string& str) { return Match(str.data()); }
     inline void Assign(const std::string& pattern) {
         theRegex.assign(pattern);
         Clear();
     }
     inline void Substitute(std::string& str, const char* const replace) {
-        str = std::regex_replace(str, theRegex, replace);
-    }
-    inline void Substitute(const char* str, const std::string& replace) {
-        Substitute(str, replace.data());
-    }
-    inline void Substitute(std::string& str, const std::string& replace) {
-        Substitute(str, replace.data());
-    }
-    inline void Sub(const char* str, const char* const replace) {
-        Substitute(str, replace);
-    }
-    inline void Sub(const char* str, const std::string& replace) {
-        Substitute(str, replace.data());
+        str = std::regex_replace(str, theRegex, std::string(replace));
     }
     inline void Sub(std::string& str, const char* const replace) {
-        Substitute(str, replace);
+        Substitute(str, std::string(replace));
     }
     inline void Sub(std::string& str, const std::string& replace) {
-        Substitute(str, replace.data());
+        Substitute(str, replace);
     }
+
+    friend std::ostream& operator<<(std::ostream& os, const Regex& r);
 };
 
-inline int Regex::Match(const char* const str) {
+inline int Regex::Match(const std::string& str) {
     Clear();
     if (std::regex_search(str, theResult, theRegex) == false) {
         return 0;
@@ -129,28 +119,12 @@ inline int Regex::Match(const char* const str) {
     return theTokens.size();
 }
 
-inline const std::vector<std::string>& Regex::Split(const char* const str) {
-    Clear();
-    for (std::regex_token_iterator<const char*>
-             regit(str, str + strlen(str), theRegex, -1),
-         regend;
-         regit != regend;
-         ++regit)
-    {
-        theTokens.push_back(regit->str());
-    }
-    return theTokens;
-}
-
 inline const std::vector<std::string>& Regex::Split(const std::string& str) {
     Clear();
-    for (std::regex_token_iterator<std::string::const_iterator>
-             regit(str.begin(), str.end(), theRegex, -1),
-         regend;
-         regit != regend;
-         ++regit)
-    {
-        theTokens.push_back(regit->str());
+    using rti = std::regex_token_iterator<std::string::const_iterator>;
+    rti begin(str.begin(), str.end(), theRegex, -1);
+    for (rti end; begin != end; ++begin) {
+        theTokens.push_back(begin->str());
     }
     return theTokens;
 }
@@ -161,6 +135,11 @@ inline void Regex::PrintTokens(std::ostream& out) const {
         out << "  [" << el << "]";
     }
     out << "\n";
+}
+
+std::ostream& operator<<(std::ostream& os, const Regex& r) {
+    os << "Pattern=" << r.thePattern << ": \t";
+    r.PrintTokens(os);
 }
 
 }  // namespace tools

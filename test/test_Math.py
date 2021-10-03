@@ -11,7 +11,7 @@ def test_constant():
 def test_square():
     """Unitary test of tools::Math::sq(uare)"""
     sq = PyTools.tools.Math.sq
-    square = PyTools.tools.Math.sq
+    square = PyTools.tools.Math.square
     assert sq(0) == 0
     assert sq(1) == 1
     assert sq(2) == 4

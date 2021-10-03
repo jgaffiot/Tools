@@ -4,9 +4,9 @@ fail_fast: true
 minimum_pre_commit_version: 1.15.0
 
 repos:
+# Python
   - repo: local
     hooks:
-# Python
       - id: black
         name: Black
         entry: black
@@ -52,6 +52,7 @@ repos:
           - --inline-suppr
           - --project=compile_commands.json
           - --error-exitcode=1]
+          - -D__GNUC__
 
       - id: compilation
         name: Compilation
@@ -63,7 +64,7 @@ repos:
 
 # Markdown
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.27.1
+    rev: v0.28.1
     hooks:
       - id: markdownlint
         types: [markdown]
@@ -125,7 +126,7 @@ repos:
       - id: requirements-txt-fixer
 
   #- repo: https://github.com/python/black
-    #rev: 21.5b1
+    #rev: 21.9b0
     #hooks:
       #- id: black
         #language_version: python3
@@ -138,7 +139,7 @@ repos:
         #types: [python]
 
   #- repo: https://github.com/asottile/pyupgrade
-    #rev: v2.17.0
+    #rev: v2.29.0
     #hooks:
       #- id: pyupgrade
         #types: [python]
