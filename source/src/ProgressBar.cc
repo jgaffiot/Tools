@@ -130,7 +130,8 @@ void display_end_bar(char* disp, size_t n) {
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
-ProgressBar::ProgressBar(double _NbIteration): NbIteration(_NbIteration) {
+ProgressBar::ProgressBar(double _NbIteration):
+    NbIteration(_NbIteration), small_buffer(), large_buffer() {
     init = Clock::now();
     previous = init;
 }

@@ -10,6 +10,8 @@
 #define TOOLS_VECTOR3_HH 1
 
 #include <array>
+#include <ostream>
+#include <string>
 
 #include "BaseError.hh"
 #include "Math.hh"
@@ -92,6 +94,8 @@ inline Vector3 operator*(double d, const Vector3& v) {
 inline Vector3 operator/(const Vector3& v, double d) {
     return Vector3(v.x() / d, v.y() / d, v.z() / d);
 }
+
+std::ostream& operator<<(std::ostream& os, const Vector3& v);
 
 }  // namespace tools
 

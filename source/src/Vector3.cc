@@ -15,7 +15,7 @@
 namespace tools
 {
 void Vector3::SetMagThetaPhi(double mag, double theta, double phi) {
-    double amag = abs(mag);
+    double amag = std::abs(mag);
     v[2] = amag * cos(theta);
     double rho(amag * sin(theta));
     v[1] = rho * sin(phi);
@@ -68,6 +68,11 @@ Vector3& Vector3::Unit() {
     v[1] /= norm;
     v[2] /= norm;
     return *this;
+}
+
+std::ostream& operator<<(std::ostream& os, const Vector3& v) {
+    os << "(" << v[0] << "," << v[1] << "," << v[2] << ")";
+    return os;
 }
 
 }  // namespace tools

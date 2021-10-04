@@ -55,7 +55,7 @@ public:
     void DisplayEnd();
 
 private:
-    typedef std::chrono::high_resolution_clock Clock;
+    using Clock = std::chrono::high_resolution_clock;
 
     double NbIteration;
     double previous_iter = 0.;
