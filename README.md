@@ -31,6 +31,7 @@ Yet another small C++ generic library, but with an automatic Python binding!
 - `StringUtils`: string manipulation functions: concatenation of an arbitrary number of
   arguments of any types into a string, split, join and a compile time hash function to
   allow to switch on strings.
+- `TypeErasure`: provides a wrapper for functions with arbitrary arguments
 - `Vector3`: yet another implementation of the 3-dimensional mathematical vector.
 
 ## Build
