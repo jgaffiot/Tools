@@ -8,6 +8,16 @@ def test_constant():
     assert PyTools.tools.Math.Pi() == 3.141592653589793
 
 
+def test_equals():
+    """Unitary test of tools::Math::equals"""
+    equals = PyTools.tools.Math.equals
+    assert equals(0.1 + 0.2, 0.3)
+    assert equals(1e-10 - 1e-10, 0)
+    assert equals(1e-10, 1e-10)
+    assert equals(1e10, 1e10)
+    assert equals(1e10 + 2e10, 3e10)
+
+
 def test_square():
     """Unitary test of tools::Math::sq(uare)"""
     sq = PyTools.tools.Math.sq

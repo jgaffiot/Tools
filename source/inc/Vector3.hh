@@ -12,6 +12,7 @@
 #include <array>
 #include <ostream>
 #include <string>
+#include <type_traits>
 
 #include "BaseError.hh"
 #include "Math.hh"
@@ -35,9 +36,9 @@ public:
     Vector3() {}
     Vector3(double x, double y, double z): v({x, y, z}) {}
 
-    inline bool operator==(const Vector3& other) {
-        return v[0] == other.x() and v[1] == other.x() and v[2] == other.z();
-    }
+    Vector3(const Vector3&) = default;
+    Vector3& operator=(const Vector3&) = default;
+
     inline double operator[](std::size_t i) const { return v[i]; }
     inline double operator()(std::size_t i) const {
         if (i < 3) {
@@ -72,6 +73,15 @@ public:
     Vector3& RotateY(double phi);
     Vector3& RotateZ(double phi);
 
+    friend Vector3 operator+(const Vector3& a, const Vector3& b);
+    friend Vector3 operator-(const Vector3& a, const Vector3& b);
+    friend double operator*(const Vector3& a, const Vector3& b);
+    friend Vector3 operator*(const Vector3& v, double d);
+    friend Vector3 operator*(double d, const Vector3& v);
+    friend Vector3 operator/(const Vector3& v, double d);
+    friend bool operator==(const Vector3& a, const Vector3& b);
+    friend std::ostream& operator<<(std::ostream& os, const Vector3& v);
+
 private:
     std::array<double, 3> v = {{}};
 };
@@ -93,6 +103,10 @@ inline Vector3 operator*(double d, const Vector3& v) {
 }
 inline Vector3 operator/(const Vector3& v, double d) {
     return Vector3(v.x() / d, v.y() / d, v.z() / d);
+}
+inline bool operator==(const Vector3& a, const Vector3& b) {
+    return Math::equals(a.x(), b.x()) and Math::equals(a.y(), b.y())
+           and Math::equals(a.z(), b.z());
 }
 
 std::ostream& operator<<(std::ostream& os, const Vector3& v);
