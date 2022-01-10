@@ -10,6 +10,7 @@
 #define TOOLS_MATH_HH 1
 
 #include <cmath>
+#include <limits>
 
 namespace tools
 {
@@ -50,8 +51,27 @@ inline constexpr double Sqrt2() {
 ////////////////////////////////////////////////////////////////
 ///////////////// Generic mathematical function ////////////////
 ////////////////////////////////////////////////////////////////
-// Some mathematical functions with unlimited range thanks to variadic templates
+// floating point comparison
+template<
+    typename Floating,
+    typename = typename std::enable_if<std::is_floating_point<Floating>::value>>
+bool equals(Floating A, Floating B) {
+    // Check if the numbers are really close -- needed
+    // when comparing numbers near zero.
+    Floating diff = fabs(A - B);
+    if (diff <= 2 * std::numeric_limits<Floating>::epsilon())
+        return true;
 
+    A = fabs(A);
+    B = fabs(B);
+    Floating largest = (B > A) ? B : A;
+
+    if (diff <= largest * std::numeric_limits<Floating>::epsilon())
+        return true;
+    return false;
+}
+
+// Some mathematical functions with unlimited range thanks to variadic templates
 template<typename T>
 inline T sq(T val) {
     return val * val;
