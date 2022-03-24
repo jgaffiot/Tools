@@ -26,8 +26,9 @@ private:
     template<size_t... Is>
     std::tuple<Args...> make_tuple_impl(
         std::vector<std::any> any_args, std::index_sequence<Is...>) {
-        return std::make_tuple(std::any_cast<std::decay<decltype(std::get<Is>(args))>>(
-            any_args.at(Is))...);
+        return std::make_tuple(
+            std::any_cast<std::decay_t<decltype(std::get<Is>(args))>>(
+                any_args.at(Is))...);
     }
 };
 
