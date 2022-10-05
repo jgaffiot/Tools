@@ -29,8 +29,8 @@
 #    pragma link C++ function tools::cat < char>;
 #    pragma link C++ function tools::join < char>;
 #    pragma link C++ function tools::split;
-#    pragma link C++ function tools::type_name < char >;
-#    pragma link C++ function tools::operator<< < Enum{} >;
+#    pragma link C++ function tools::type_name < char>;
+#    pragma link C++ function tools::operator< < < Enum{}>;
 #    pragma link C++ function tools::Math::Pi;
 #    pragma link C++ function tools::Math::TwoPi;
 #    pragma link C++ function tools::Math::PiSq;

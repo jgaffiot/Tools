@@ -140,6 +140,7 @@ inline void Regex::PrintTokens(std::ostream& out) const {
 std::ostream& operator<<(std::ostream& os, const Regex& r) {
     os << "Pattern=" << r.thePattern << ": \t";
     r.PrintTokens(os);
+    return os;
 }
 
 }  // namespace tools

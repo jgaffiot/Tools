@@ -144,8 +144,7 @@ constexpr hash_t strhash(
     return *str ? strhash(str + 1, (*str ^ last_val) * detail_string::prime) : last_val;
 }
 //! std::string constexpr hash function, same as the C-string version above
-constexpr hash_t strhash(const std::string_view& str)
-{
+constexpr hash_t strhash(const std::string_view& str) {
     return strhash(str.data());
 }
 //! operator _hash intended for constexpr hash of C-string

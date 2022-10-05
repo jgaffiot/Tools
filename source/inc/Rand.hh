@@ -133,8 +133,7 @@ private:
     static std::function<double(void)> Chi2Rand;
 
 public:
-    enum Axis
-    {
+    enum Axis {
         X = 0,
         Y = 1,
         Z = 2
