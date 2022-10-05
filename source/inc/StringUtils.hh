@@ -138,14 +138,11 @@ constexpr static hash_t prime = 0x100000001B3ull;
 constexpr static hash_t basis = 0xCBF29CE484222325ull;
 }  // namespace detail_string
 
-//! C-string constexpr hash function
-constexpr hash_t strhash(
-    const char* const str, hash_t last_val = detail_string::basis) {
-    return *str ? strhash(str + 1, (*str ^ last_val) * detail_string::prime) : last_val;
-}
-//! std::string constexpr hash function, same as the C-string version above
-constexpr hash_t strhash(const std::string_view& str) {
-    return strhash(str.data());
+//! constexpr hash function
+constexpr hash_t strhash(std::string_view str, hash_t last_val = detail_string::basis) {
+    return not str.empty() ? strhash(
+               str.data() + 1, (str.front() ^ last_val) * detail_string::prime)
+                           : last_val;
 }
 //! operator _hash intended for constexpr hash of C-string
 constexpr hash_t operator"" _hash(const char* const p, size_t) {
