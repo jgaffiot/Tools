@@ -166,7 +166,9 @@ public:
     const std::string& GetStrValue(const std::string& key) const;
 
     // bunch of classic accessors
-    inline double operator[](const std::string& key) const { return GetNumValue(key); }
+    inline double operator[](const std::string& key) const {
+        return GetNumValue(key);
+    }
     inline const std::string& operator()(const std::string& key) const {
         return GetStrValue(key);
     }
@@ -196,11 +198,12 @@ public:
     }
 
     /** Get list of keys, in the order in which they were read in. */
-    inline const std::vector<std::string>& GetListOfKeys() const { return KeyList; }
+    inline const std::vector<std::string>& GetListOfKeys() const {
+        return KeyList;
+    }
 
     /// Setters, NON constant methods -> DO need to check for IsReadOnly
-    enum EOverwrite
-    {
+    enum EOverwrite {
         kKeep,
         kOverride
     };
@@ -224,7 +227,9 @@ public:
 
 private:
     /// Constructors
-    explicit DataBase(bool isreadonly) { IsReadOnly = isreadonly; }
+    explicit DataBase(bool isreadonly) {
+        IsReadOnly = isreadonly;
+    }
     DataBase() = delete;
     DataBase(const DataBase&) = delete;
     DataBase(DataBase&&) = delete;
