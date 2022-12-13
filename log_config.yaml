@@ -1,0 +1,44 @@
+---
+version: 1
+disable_existing_loggers: False
+formatters:
+    complete:
+        datefmt: '%Y-%m-%d %H:%M:%S'
+        format: '%(levelname)s - %(asctime)s - %(module)s - %(message)s'
+handlers:
+    console:
+        class: logging.StreamHandler
+        level: INFO
+        formatter: complete
+        stream: ext://sys.stdout
+    full_log_file:
+        class: logging.handlers.RotatingFileHandler
+        level: DEBUG
+        formatter: complete
+        filename: "log/full.log"
+        encoding: utf-8
+        mode: a
+        maxBytes: 10485760 # 10 MB
+        backupCount: 10
+    main_log_file:
+        class: logging.handlers.RotatingFileHandler
+        level: INFO
+        formatter: complete
+        filename: "log/main.log"
+        encoding: utf-8
+        mode: a
+        maxBytes: 10485760 # 10 MB
+        backupCount: 10
+loggers:
+    app:
+        level: DEBUG
+        handlers: [full_log_file, console]
+        propagate: yes
+    MainAction:
+        level: INFO
+        handlers: [main_log_file, full_log_file, console]
+        propagate: no
+root:
+    level: DEBUG
+    handlers: [console]
+...
